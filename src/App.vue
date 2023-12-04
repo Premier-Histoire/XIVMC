@@ -9,7 +9,7 @@
         <div class="select-box-container">
           <span class="dropdown-icon">{{ isSelectBoxOpen ? '▼' : '▶' }}</span>
           <select id="servers" class="select-box" @focus="isSelectBoxOpen = true" @blur="isSelectBoxOpen = false"
-            ref="servers" @change="onServerSelect">
+            ref="servers" @change="onServerSelect" v-model="selectedServer">
             <option disabled="" value="">- Please Choose a Server -</option>
             <optgroup label="Chaos - Europe">
               <option value="Cerberus">Cerberus</option>
@@ -222,7 +222,7 @@
               </div>
             </div>
           </div>
-          <div class="material-row price-info">
+          <div class="material-row price-info border-top">
             <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
             <span class="material-name">総合計価格</span>
             <span class="material-price">{{ selectedInfo.totalCost }} gil</span>
@@ -232,8 +232,39 @@
             <span class="material-name">マーケット価格</span>
             <span class="material-price">{{ selectedInfo.finalProductPrice }} gil</span>
           </div>
+          <div class="material-row price-info">
+            <div class="button-placeholder"></div>
+            <span class="material-name">利益率</span>
+            <span class="material-price">{{ ((selectedInfo.finalProductPrice - selectedInfo.totalCost) /
+              selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+          </div>
         </div>
+        <div class="history">
+          <div v-if="selectedInfo.sales" class="history-section">
+            <h5>販売履歴</h5>
+            <div class="history-data">
+              <ul>
+                <li v-for="sale in selectedInfo.sales.entries" :key="sale.timestamp">
+                  <span>{{ sale.pricePerUnit }} gil</span>
+                  <span>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</span>
+                  <span>{{ sale.buyerName }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
 
+          <div v-if="selectedInfo.current" class="history-section">
+            <h5>現在の市場価格</h5>
+            <div class="history-data">
+              <ul>
+                <li v-for="listing in selectedInfo.current.listings" :key="listing.listingID">
+                  <span>{{ listing.pricePerUnit }} gil</span>
+                  <span>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -345,6 +376,10 @@ export default {
   },
   created() {
     this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
+    const savedServer = localStorage.getItem('selectedServer');
+    if (savedServer) {
+      this.selectedServer = savedServer;
+    }
   },
   methods: {
     async loadJsonData() {
@@ -422,12 +457,41 @@ export default {
     },
     onServerSelect() {
       this.selectedServer = this.$refs.servers.value;
+      // 選択されたサーバーをローカルストレージに保存
+      localStorage.setItem('selectedServer', this.selectedServer);
     },
     async getLowestPrice(itemId) {
       // Universalis APIを使用してアイテムの最安値を取得
       const response = await fetch(`https://universalis.app/api/${this.selectedServer}/${itemId}`);
       const data = await response.json();
       return data.minPrice; // 最安値を返す
+    },
+    async salesHistory(itemId) {
+      try {
+        const response = await fetch(`https://universalis.app/api/v2/history/${this.selectedServer}/${itemId}`);
+        if (!response.ok) {
+          throw new Error('サーバーからの応答がありません');
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('salesHistory取得エラー:', error);
+        return null;
+      }
+    },
+
+    async currentHistory(itemId) {
+      try {
+        const response = await fetch(`https://universalis.app/api/v2/${this.selectedServer}/${itemId}`);
+        if (!response.ok) {
+          throw new Error('サーバーからの応答がありません');
+        }
+        const data = await response.json();
+        return data;
+      } catch (error) {
+        console.error('currentHistory取得エラー:', error);
+        return null;
+      }
     },
     async selectItem(item) {
       try {
@@ -456,7 +520,10 @@ export default {
             });
 
             selectedItem.totalCost = totalCost;
+            console.log(item.ItemId)
             selectedItem.finalProductPrice = await this.getLowestPrice(item.ItemId);
+            selectedItem.sales = await this.salesHistory(item.ItemId);
+            selectedItem.current = await this.currentHistory(item.ItemId);
           }
         }
         this.selectedInfo = selectedItem;
@@ -739,7 +806,7 @@ export default {
 }
 
 .info {
-  width: calc(100vw - 30% - 290px);
+  width: calc(100vw - 25% - 290px);
   height: calc(100vh - 20px);
   padding: 10px;
   color: #fff;
@@ -761,11 +828,15 @@ export default {
 }
 
 .craft-box {
-  height: 445px;
+  height: calc(50vh - 25px);
   overflow-y: scroll;
   margin-top: 10px;
   margin-left: 10px;
-  padding: 0px;
+  padding-right: 15px;
+}
+
+.history {
+  height: calc(50vh - 65px);
 }
 
 .material-button {
@@ -834,6 +905,64 @@ ul {
 .sub-material-row {
   margin-left: 70px;
   /* サブ素材のインデント */
+}
+
+.border-top {
+  border-top: solid #fff 2px;
+}
+
+.history {
+  display: flex;
+}
+
+.history-section {
+  flex: 0 0 50%;
+  /* 各セクションを横幅の50%に設定 */
+  padding: 15px;
+  color: #fff;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: #2D302D;
+}
+
+.history-section:last-child {
+  margin-right: 0;
+  /* 最後のセクションの右余白を取り除く */
+}
+
+.history-data {
+  max-height: calc(50vh - 65px - 40px);
+  /* 高さをヘッダーとの差し引きで設定 */
+  overflow-y: auto;
+  /* スクロール可能に設定 */
+  border-top: 1px solid #eee;
+  /* 上部に境界線を追加 */
+}
+
+.history-section h5 {
+  margin-bottom: 10px;
+  /* タイトルとコンテンツの間隔を設定 */
+}
+
+.history-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.history-section li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.history-section span {
+  flex: 1;
+  padding: 0 5px;
+  text-align: center;
+  color: #fff;
 }
 </style>
 
