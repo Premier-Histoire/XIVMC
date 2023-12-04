@@ -612,7 +612,7 @@ export default {
   color: #fff;
   top: 61px;
   left: 45px;
-  z-index: 1000;
+  z-index: 100;
   font-size: 12px;
   /* セレクトボックスの上に表示 */
 }
