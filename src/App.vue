@@ -174,6 +174,7 @@
       <div class="copyright">
         <p>FINAL FANTASY XIV</p>
         <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
+        <p>Create by Premier</p>
       </div>
     </div>
     <div class="result">
@@ -200,7 +201,10 @@
           <h3>{{ selectedInfo.Name }}</h3>
         </div>
         <div v-if="selectedInfo.isCraftable" class="craft-box">
-          <h5>必要素材</h5>
+          <div class="d-flex ">
+            <h5>必要素材</h5>
+            <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
+          </div>
           <div v-for="material in selectedInfo.materials" :key="material.name">
             <div class="material-row">
               <button class="material-button" v-if="material.hasSubMaterials"
@@ -211,7 +215,13 @@
               <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン" class="material-icon">
               <span class="material-name">{{ material.name }}</span>
               <span class="material-quantity">{{ material.quantity }}個</span>
-              <span class="material-price">{{ material.price }} gil</span>
+              <span v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
+                class="material-price cheaper-price">
+                {{ material.subMaterialsTotalCost }} gil
+              </span>
+              <span v-else class="material-price">
+                {{ material.price }} gil
+              </span>
             </div>
             <div v-if="material.expanded" class="sub-materials">
               <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name" class="sub-material-row">
@@ -252,7 +262,6 @@
               </ul>
             </div>
           </div>
-
           <div v-if="selectedInfo.current" class="history-section">
             <h5>現在の市場価格</h5>
             <div class="history-data">
@@ -461,10 +470,14 @@ export default {
       localStorage.setItem('selectedServer', this.selectedServer);
     },
     async getLowestPrice(itemId) {
-      // Universalis APIを使用してアイテムの最安値を取得
+      // Universalis APIを使用してアイテムの価格を取得
       const response = await fetch(`https://universalis.app/api/${this.selectedServer}/${itemId}`);
       const data = await response.json();
-      return data.minPrice; // 最安値を返す
+      if (data.minPriceHQ === 0) {
+        return data.minPrice;
+      } else {
+        return data.minPriceHQ;
+      }
     },
     async salesHistory(itemId) {
       try {
@@ -520,14 +533,12 @@ export default {
             });
 
             selectedItem.totalCost = totalCost;
-            console.log(item.ItemId)
             selectedItem.finalProductPrice = await this.getLowestPrice(item.ItemId);
             selectedItem.sales = await this.salesHistory(item.ItemId);
             selectedItem.current = await this.currentHistory(item.ItemId);
           }
         }
         this.selectedInfo = selectedItem;
-        console.log(selectedItem)
       } catch (error) {
         console.error('アイテム選択エラー:', error);
       }
@@ -539,12 +550,18 @@ export default {
       const price = await this.getLowestPrice(ingredientItemId);
       const materialItem = this.itemsData.find(i => i.ItemId === ingredientItemId);
       const subMaterials = await this.getSubMaterials(ingredientItemId);
+      const subMaterialsTotalCost = subMaterials.reduce(
+        (total, subMaterial) => total + (subMaterial.price * subMaterial.quantity),
+        0
+      );
 
       return {
         name: materialItem ? materialItem.Name : '不明な素材',
         quantity: quantity,
         iconUrl: materialItem ? this.getIconUrl(materialItem.Icon) : null,
         price: price,
+        isCheaper: subMaterialsTotalCost < price,
+        subMaterialsTotalCost: subMaterialsTotalCost,
         expanded: false,
         hasSubMaterials: subMaterials.length > 0, // subMaterialsが存在する場合はtrue, そうでなければfalse
         subMaterials: subMaterials
@@ -963,6 +980,18 @@ ul {
   padding: 0 5px;
   text-align: center;
   color: #fff;
+}
+
+.cheaper-price {
+  color: red;
+}
+
+.info-memo {
+  font-size: 12px;
+  color: yellow;
+  vertical-align: bottom;
+  margin-top: 6px;
+  margin-bottom: 0;
 }
 </style>
 
