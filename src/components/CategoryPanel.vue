@@ -247,7 +247,7 @@ export default {
     position: absolute;
     color: #fff;
     top: 480px;
-    left: 45px;
+    left: 35px;
     z-index: 100;
     font-size: 12px;
     /* セレクトボックスの上に表示 */
