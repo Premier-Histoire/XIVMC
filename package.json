@@ -10,6 +10,7 @@
     "start": "vite --open"
   },
   "dependencies": {
+    "@vercel/analytics": "^1.1.2",
     "axios": "^1.6.2",
     "mdb-vue-ui-kit": "4.1.1",
     "vue": "^3.2.40",
