@@ -198,7 +198,10 @@
       <div v-else-if="selectedInfo" class="info-box">
         <div class="info-text">
           <img :src="selectedInfo.iconUrl" alt="アイコン" class="item-icon-lg">
-          <h3>{{ selectedInfo.Name }}</h3>
+          <div>
+            <h3>{{ selectedInfo.Name }}</h3>
+            <h6>{{ selectedInfo.Description }}</h6>
+          </div>
         </div>
         <div v-if="selectedInfo.isCraftable" class="craft-box">
           <div class="d-flex ">
@@ -248,29 +251,56 @@
             <span class="material-price">{{ ((selectedInfo.finalProductPrice - selectedInfo.totalCost) /
               selectedInfo.totalCost * 100).toFixed(2) }}%</span>
           </div>
-        </div>
-        <div class="history">
-          <div v-if="selectedInfo.sales" class="history-section">
-            <h5>販売履歴</h5>
-            <div class="history-data">
-              <ul>
-                <li v-for="sale in selectedInfo.sales.entries" :key="sale.timestamp">
-                  <span>{{ sale.pricePerUnit }} gil</span>
-                  <span>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</span>
-                  <span>{{ sale.buyerName }}</span>
-                </li>
-              </ul>
+          <div class="history">
+            <div v-if="selectedInfo.sales" class="history-section">
+              <h5>販売履歴</h5>
+              <div class="history-data">
+                <ul>
+                  <li v-for="sale in selectedInfo.sales.entries" :key="sale.timestamp">
+                    <span>{{ sale.pricePerUnit }} gil</span>
+                    <span>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</span>
+                    <span>{{ sale.buyerName }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div v-if="selectedInfo.current" class="history-section">
+              <h5>現在の市場価格</h5>
+              <div class="history-data">
+                <ul>
+                  <li v-for="listing in selectedInfo.current.listings" :key="listing.listingID">
+                    <span>{{ listing.pricePerUnit }} gil</span>
+                    <span>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div v-if="selectedInfo.current" class="history-section">
-            <h5>現在の市場価格</h5>
-            <div class="history-data">
-              <ul>
-                <li v-for="listing in selectedInfo.current.listings" :key="listing.listingID">
-                  <span>{{ listing.pricePerUnit }} gil</span>
-                  <span>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</span>
-                </li>
-              </ul>
+        </div>
+        <div v-else>
+          <div class="history">
+            <div v-if="selectedInfo.sales" class="history-section">
+              <h5>販売履歴</h5>
+              <div class="history-data">
+                <ul>
+                  <li v-for="sale in selectedInfo.sales.entries" :key="sale.timestamp">
+                    <span>{{ sale.pricePerUnit }} gil</span>
+                    <span>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</span>
+                    <span>{{ sale.buyerName }}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div v-if="selectedInfo.current" class="history-section">
+              <h5>現在の市場価格</h5>
+              <div class="history-data">
+                <ul>
+                  <li v-for="listing in selectedInfo.current.listings" :key="listing.listingID">
+                    <span>{{ listing.pricePerUnit }} gil</span>
+                    <span>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
@@ -344,8 +374,8 @@ export default {
           { id: '060135', pairId: '42' }
         ],
         'その他': [
-          { id: '060136', pairId: '6' },
-          { id: '060137', pairId: '7' },
+          { id: '060136', pairId: '43' },
+          { id: '060137', pairId: '44' },
           { id: '060146', pairId: '45' },
           { id: '060138', pairId: '46' },
           { id: '060139', pairId: '47' },
@@ -388,6 +418,8 @@ export default {
     const savedServer = localStorage.getItem('selectedServer');
     if (savedServer) {
       this.selectedServer = savedServer;
+    } else {
+      this.selectedServer = 'chocobo';
     }
   },
   methods: {
@@ -424,20 +456,25 @@ export default {
     },
     FilterSearch(filterData) {
       try {
-        // filterData.selectedOptionを配列に変換する
         const selectedJobId = this.findClassJobId(filterData.selectedJob);
 
-        this.searchResults = this.itemsData.filter(item =>
-          item.ItemSearchCategory === filterData.pairId &&
-          (
-            (filterData.category === 'メインアーム/サブアーム' && item.LevelEquip >= filterData.level) ||
-            (
-              filterData.category === '防具/アクセサリ' && item.LevelEquip >= filterData.level &&
-              // '*'が選択されている場合はこの条件をスキップする
-              selectedJobId.includes(String(item.ClassJobCategory))
-            )
-          )
-        ).map(item => ({
+        this.searchResults = this.itemsData.filter(item => {
+          // メインアーム/サブアームまたは防具/アクセサリの場合
+          if (filterData.category === 'メインアーム/サブアーム' || filterData.category === '防具/アクセサリ') {
+            return item.ItemSearchCategory === filterData.pairId &&
+              (
+                (filterData.category === 'メインアーム/サブアーム' && item.LevelEquip >= filterData.level) ||
+                (
+                  filterData.category === '防具/アクセサリ' && item.LevelEquip >= filterData.level &&
+                  selectedJobId.includes(String(item.ClassJobCategory))
+                )
+              );
+          }
+          // それ以外のカテゴリの場合
+          else {
+            return item.ItemSearchCategory === filterData.pairId;
+          }
+        }).map(item => ({
           ...item,
           iconUrl: this.getIconUrl(item.Icon),
           isCraftable: this.isCraftable(item.ItemId)
@@ -537,6 +574,9 @@ export default {
             selectedItem.sales = await this.salesHistory(item.ItemId);
             selectedItem.current = await this.currentHistory(item.ItemId);
           }
+        } else {
+          selectedItem.sales = await this.salesHistory(item.ItemId);
+          selectedItem.current = await this.currentHistory(item.ItemId);
         }
         this.selectedInfo = selectedItem;
       } catch (error) {
@@ -674,6 +714,7 @@ export default {
   padding-bottom: 5px;
 }
 
+
 .serverselect p {
   color: #7D7463;
   font-size: 20px;
@@ -716,6 +757,10 @@ export default {
   border: 1px solid #222222;
   border-radius: 9999px;
   font-size: 12px;
+}
+
+.select-box:focus {
+  outline: none;
 }
 
 .freesearch {
@@ -844,8 +889,11 @@ export default {
   margin-bottom: 0px;
 }
 
+.info h6 {
+  margin-bottom: 0px;
+}
+
 .craft-box {
-  height: calc(50vh - 25px);
   overflow-y: scroll;
   margin-top: 10px;
   margin-left: 10px;

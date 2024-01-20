@@ -117,7 +117,6 @@ export default {
                 pairId,
                 category: this.category // カテゴリーを追加
             };
-
             // カテゴリーに応じて適切なレベルを使用
             if (this.category === 'メインアーム/サブアーム') {
                 filterData.level = this.mainArmSubArmLevel;
@@ -125,7 +124,6 @@ export default {
                 filterData.level = this.armorAccessoryLevel;
                 filterData.selectedJob = this.selectedJob; // ClassJobCategory.ID を追加
             }
-
             // 親コンポーネントにフィルター検索の指示を伝える
             this.$emit('filter-search', filterData);
         }
@@ -269,6 +267,10 @@ export default {
     border: 1px solid #222222;
     border-radius: 9999px;
     font-size: 12px;
+}
+
+.select-box:focus {
+  outline: none;
 }
 
 ::-webkit-scrollbar {
