@@ -703,6 +703,7 @@ export default {
 .search-container {
   width: 290px;
   height: calc(100vh - 20px);
+  position: relative;
 }
 
 .serverselect {
@@ -735,7 +736,7 @@ export default {
 .dropdown-icon {
   position: absolute;
   color: #fff;
-  top: 61px;
+  top: 51px;
   left: 35px;
   z-index: 100;
   font-size: 12px;
@@ -789,6 +790,11 @@ export default {
   font-size: 12px;
   color: #FFF;
   text-align: center;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
 }
 
 .copyright p {

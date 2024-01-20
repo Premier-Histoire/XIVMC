@@ -244,7 +244,7 @@ export default {
 .dropdown-icon {
     position: absolute;
     color: #fff;
-    top: 480px;
+    top: 471px;
     left: 35px;
     z-index: 100;
     font-size: 12px;
