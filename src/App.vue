@@ -187,7 +187,6 @@
       <div class="copyright">
         <p>FINAL FANTASY XIV</p>
         <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
-        <p>Create by Premier</p>
       </div>
     </div>
     <div class="result">
