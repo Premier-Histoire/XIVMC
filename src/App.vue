@@ -2,20 +2,20 @@
   <div class="d-flex">
     <div v-if="isLoading" class="loading-indicator">
       <div class="lds-spinner">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
+    </div>
     <div class="search-container">
       <div class="serverselect">
         <p>SEVER SELECT</p>
@@ -228,103 +228,105 @@
             <h6>{{ selectedInfo.Description }}</h6>
           </div>
         </div>
-        <div v-if="selectedInfo.isCraftable" class="craft-box">
-          <div class="d-flex ">
+        <div class="contents">
+          <div v-if="selectedInfo.isCraftable" class="d-flex px-3">
             <h5>必要素材</h5>
             <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
           </div>
-          <div v-for="material in selectedInfo.materials" :key="material.name">
-            <div class="material-row">
-              <button class="material-button" v-if="material.hasSubMaterials"
-                @click="material.expanded = !material.expanded">
-                {{ material.expanded ? '▼' : '▶' }}
-              </button>
-              <div v-else class="button-placeholder"></div>
-              <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン" class="material-icon">
-              <span class="material-name">{{ material.name }}</span>
-              <span class="material-quantity">{{ material.quantity }}個</span>
-              <span v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
-                class="material-price cheaper-price">
-                {{ material.subMaterialsTotalCost }} gil
-              </span>
-              <span v-else class="material-price">
-                {{ material.price }} gil
-              </span>
-            </div>
-            <div v-if="material.expanded" class="sub-materials">
-              <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name" class="sub-material-row">
-                <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン" class="material-icon">
-                <span class="material-name">{{ subMaterial.name }}</span>
-                <span class="material-quantity">{{ subMaterial.quantity }}個</span>
-                <span class="material-price">{{ subMaterial.price }} gil</span>
+          <div v-if="selectedInfo.isCraftable" class="craft-box">
+            <div v-for="material in selectedInfo.materials" :key="material.name">
+              <div class="material-row">
+                <button class="material-button" v-if="material.hasSubMaterials"
+                  @click="material.expanded = !material.expanded">
+                  {{ material.expanded ? '▼' : '▶' }}
+                </button>
+                <div v-else class="button-placeholder"></div>
+                <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン" class="material-icon">
+                <span class="material-name">{{ material.name }}</span>
+                <span class="material-quantity">{{ material.quantity }}個</span>
+                <span v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
+                  class="material-price cheaper-price">
+                  {{ material.subMaterialsTotalCost }} 
+                </span>
+                <span v-else class="material-price">
+                  {{ material.price }} 
+                </span>
+              </div>
+              <div v-if="material.expanded" class="sub-materials">
+                <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name" class="sub-material-row">
+                  <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン" class="material-icon">
+                  <span class="material-name">{{ subMaterial.name }}</span>
+                  <span class="material-quantity">{{ subMaterial.quantity }}個</span>
+                  <span class="material-price">{{ subMaterial.price }} </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="material-row price-info border-top">
-            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-            <span class="material-name">総合計価格</span>
-            <span class="material-price">{{ selectedInfo.totalCost }} gil</span>
-          </div>
-          <div class="material-row price-info">
-            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-            <span class="material-name">マーケット価格</span>
-            <span class="material-price">{{ selectedInfo.finalProductPrice }} gil</span>
-          </div>
-          <div class="material-row price-info">
-            <div class="button-placeholder"></div>
-            <span class="material-name">利益率</span>
-            <span class="material-price">{{ ((selectedInfo.finalProductPrice - selectedInfo.totalCost) /
-              selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+            <div class="material-row price-info border-top">
+              <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+              <span class="material-name">総合計価格</span>
+              <span class="material-price">{{ selectedInfo.totalCost }} </span>
+            </div>
+            <div class="material-row price-info">
+              <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+              <span class="material-name">マーケット価格</span>
+              <span class="material-price">{{ selectedInfo.finalProductPrice }} </span>
+            </div>
+            <div class="material-row price-info">
+              <div class="button-placeholder"></div>
+              <span class="material-name">利益率</span>
+              <span class="material-price">{{ ((selectedInfo.finalProductPrice - selectedInfo.totalCost) /
+                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+            </div>
           </div>
           <div class="history">
             <div v-if="selectedInfo.sales" class="history-section">
               <h5>販売履歴</h5>
-              <div class="history-data">
-                <ul>
-                  <li v-for="sale in selectedInfo.sales.entries" :key="sale.timestamp">
-                    <span>{{ sale.pricePerUnit }} gil</span>
-                    <span>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</span>
-                    <span>{{ sale.buyerName }}</span>
-                  </li>
-                </ul>
+              <div class="history-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="_sticky">#</th>
+                      <th class="_sticky">HQ</th>
+                      <th class="_sticky">単価</th>
+                      <th class="_sticky">販売日</th>
+                      <th class="_sticky">購入者</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(sale, index) in selectedInfo.sales.entries" :key="sale.timestamp">
+                      <td>{{ index + 1 }}</td>
+                      <td v-if="sale.hq"></td>
+                      <td v-else></td>
+                      <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
+                      <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</td>
+                      <td>{{ sale.buyerName }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             <div v-if="selectedInfo.current" class="history-section">
               <h5>現在の市場価格</h5>
-              <div class="history-data">
-                <ul>
-                  <li v-for="listing in selectedInfo.current.listings" :key="listing.listingID">
-                    <span>{{ listing.pricePerUnit }} gil</span>
-                    <span>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-else>
-          <div class="history">
-            <div v-if="selectedInfo.sales" class="history-section">
-              <h5>販売履歴</h5>
-              <div class="history-data">
-                <ul>
-                  <li v-for="sale in selectedInfo.sales.entries" :key="sale.timestamp">
-                    <span>{{ sale.pricePerUnit }} gil</span>
-                    <span>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</span>
-                    <span>{{ sale.buyerName }}</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div v-if="selectedInfo.current" class="history-section">
-              <h5>現在の市場価格</h5>
-              <div class="history-data">
-                <ul>
-                  <li v-for="listing in selectedInfo.current.listings" :key="listing.listingID">
-                    <span>{{ listing.pricePerUnit }} gil</span>
-                    <span>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</span>
-                  </li>
-                </ul>
+              <div class="history-table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th class="_sticky">#</th>
+                      <th class="_sticky">HQ</th>
+                      <th class="_sticky">単価</th>
+                      <th class="_sticky">最終確認日</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(listing, index) in selectedInfo.current.listings" :key="listing.listingID">
+                      <td>{{ index + 1 }}</td>
+                      <td v-if="listing.hq"></td>
+                      <td v-else></td>
+                      <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
+                      <td>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -604,6 +606,7 @@ export default {
           selectedItem.current = await this.currentHistory(item.ItemId);
         }
         this.selectedInfo = selectedItem;
+        console.log(this.selectedInfo)
       } catch (error) {
         console.error('アイテム選択エラー:', error);
       }
@@ -974,7 +977,7 @@ export default {
 .info {
   width: calc(100vw - 25% - 290px);
   height: calc(100vh - 20px);
-  padding: 10px;
+  margin: 10px 0px 10px 0px;
   color: #fff;
   border-left: solid #575757 2px;
 }
@@ -997,15 +1000,17 @@ export default {
   margin-bottom: 0px;
 }
 
+.contents {
+  height: calc(100vh - 180px);
+  margin: 10px 0px 0px 0px;
+}
+
 .craft-box {
   overflow-y: scroll;
+  height: 50%;
   margin-top: 10px;
   margin-left: 10px;
   padding-right: 15px;
-}
-
-.history {
-  height: calc(50vh - 65px);
 }
 
 .material-button {
@@ -1081,58 +1086,76 @@ ul {
 }
 
 .history {
+  width: 100%;
+  height: 50%;
+  max-height: 50%;
+  padding: 0px 10px 0px 10px;
   display: flex;
+  gap: 10px;
 }
 
 .history-section {
   flex: 0 0 50%;
   /* 各セクションを横幅の50%に設定 */
-  padding: 15px;
   color: #fff;
-  margin-right: 10px;
   margin-bottom: 10px;
   background-color: #2D302D;
 }
 
-.history-section:last-child {
-  margin-right: 0;
-  /* 最後のセクションの右余白を取り除く */
+.history-table {
+  overflow-y: scroll;
+  height: 100%;
 }
 
-.history-data {
-  max-height: calc(50vh - 65px - 40px);
-  /* 高さをヘッダーとの差し引きで設定 */
-  overflow-y: auto;
-  /* スクロール可能に設定 */
-  border-top: 1px solid #eee;
-  /* 上部に境界線を追加 */
+.history-table table {
+  background-color: #272a33;
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
 }
 
-.history-section h5 {
-  margin-bottom: 10px;
-  /* タイトルとコンテンツの間隔を設定 */
-}
-
-.history-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.history-section li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 5px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.history-section span {
-  flex: 1;
-  padding: 0 5px;
-  text-align: center;
+.history-table table th,
+.history-table table td {
+  vertical-align: middle;
+  padding: 2px 5px 2px 5px;
+  border: 1px solid #434857;
   color: #fff;
+  font-size: 14px;
+  text-align: center;
+  white-space: nowrap;
 }
+
+.history-table table th {
+  background: #795548;
+}
+
+.history-table table td {
+  background: #272a33;
+}
+
+._sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  background: none;
+  border-top: none;
+  border-bottom: none;
+}
+
+._sticky:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  background: #434857;
+  z-index: -1;
+}
+
+/* ホバー時の行の背景色 */
 
 .cheaper-price {
   color: red;
@@ -1144,7 +1167,6 @@ ul {
   vertical-align: bottom;
   margin-top: 6px;
   margin-bottom: 0;
-}
-</style>
+}</style>
 
 
