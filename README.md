@@ -1,1 +1,1 @@
-# FFMC
+# XIVMarketCalculator
