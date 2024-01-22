@@ -1,1 +1,1 @@
-# XIVMarketCalculator
+# **XIVM**arket**C**alculator
