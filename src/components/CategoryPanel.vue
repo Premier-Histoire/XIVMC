@@ -5,7 +5,7 @@
             <div class="button-grid full">
                 <button v-for="(item, index) in items" :key="`btn-${index}`"
                     @click="filterSearch(item.pairId, level, selectedOption)">
-                    <img :src="`https://xivapi.com/i/060000/${item.id}.png`" alt="Icon" class="button-icon">
+                    <img :src="`https://res.cloudinary.com/dke932tm8/image/upload/v1706168566/button/${item.id}.png`" alt="Icon" class="button-icon">
                 </button>
             </div>
             <!-- レベル選択UIの追加 -->
@@ -125,6 +125,7 @@ export default {
                 filterData.selectedJob = this.selectedJob; // ClassJobCategory.ID を追加
             }
             // 親コンポーネントにフィルター検索の指示を伝える
+            console.log(filterData)
             this.$emit('filter-search', filterData);
         }
     },
@@ -134,37 +135,31 @@ export default {
   
 <style scoped>
 .searchpanel {
-    width: 290px;
     height: 100%;
 }
 
 .category {
     border: 2px solid #515151;
     border-radius: 10px;
-    width: 270px;
-    padding: 3px 10px 7px 10px;
-    margin: 0px 10px 7px 10px;
+    padding: 3px 10px 10px 10px;
+    margin:0 auto 5px auto;
 }
 
 .category p {
     font-size: 12px;
     color: #9A9A9A;
-    margin-bottom: 5px;
+    margin-bottom: 5px !important;
 }
 
 .button-grid {
     display: grid;
-    width: 245px;
     grid-template-columns: repeat(10, 20px);
-    /* 10列のグリッドに変更 */
-    gap: 5px;
+    gap: 4px;
 }
 
 .button-icon {
     width: 20px;
-    /* アイコンの幅 */
     height: 20px;
-    /* アイコンの高さ */
 }
 
 .button-grid button {
@@ -244,7 +239,7 @@ export default {
 .dropdown-icon {
     position: absolute;
     color: #fff;
-    top: 471px;
+    top: 436px;
     left: 35px;
     z-index: 100;
     font-size: 12px;

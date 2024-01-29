@@ -1,1172 +1,982 @@
 <template>
-  <div class="d-flex">
-    <div v-if="isLoading" class="loading-indicator">
-      <div class="lds-spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-    <div class="search-container">
-      <div class="serverselect">
-        <p>SEVER SELECT</p>
-        <div class="select-box-container">
-          <span class="dropdown-icon">{{ isSelectBoxOpen ? '▼' : '▶' }}</span>
-          <select id="servers" class="select-box" @focus="isSelectBoxOpen = true" @blur="isSelectBoxOpen = false"
-            ref="servers" @change="onServerSelect" v-model="selectedServer">
-            <option disabled="" value="">- Please Choose a Server -</option>
-            <optgroup label="Chaos - Europe">
-              <option value="Cerberus">Cerberus</option>
-              <option value="Louisoix">Louisoix</option>
-              <option value="Moogle">Moogle</option>
-              <option value="Omega">Omega</option>
-              <option value="Phantom">Phantom</option>
-              <option value="Ragnarok">Ragnarok</option>
-              <option value="Sagittarius">Sagittarius</option>
-              <option value="Spriggan">Spriggan</option>
-            </optgroup>
-            <optgroup label="Light - Europe">
-              <option value="Alpha">Alpha</option>
-              <option value="Lich">Lich</option>
-              <option value="Odin">Odin</option>
-              <option value="Phoenix">Phoenix</option>
-              <option value="Raiden">Raiden</option>
-              <option value="Shiva">Shiva</option>
-              <option value="Twintania">Twintania</option>
-              <option value="Zodiark">Zodiark</option>
-            </optgroup>
-            <optgroup label="Elemental - Japan">
-              <option value="Aegis">Aegis</option>
-              <option value="Atomos">Atomos</option>
-              <option value="Carbuncle">Carbuncle</option>
-              <option value="Garuda">Garuda</option>
-              <option value="Gungnir">Gungnir</option>
-              <option value="Kujata">Kujata</option>
-              <option value="Tonberry">Tonberry</option>
-              <option value="Typhon">Typhon</option>
-            </optgroup>
-            <optgroup label="Gaia - Japan">
-              <option value="Alexander">Alexander</option>
-              <option value="Bahamut">Bahamut</option>
-              <option value="Durandal">Durandal</option>
-              <option value="Fenrir">Fenrir</option>
-              <option value="Ifrit">Ifrit</option>
-              <option value="Ridill">Ridill</option>
-              <option value="Tiamat">Tiamat</option>
-              <option value="Ultima">Ultima</option>
-            </optgroup>
-            <optgroup label="Mana - Japan">
-              <option value="Anima">Anima</option>
-              <option value="Asura">Asura</option>
-              <option value="chocobo">Chocobo</option>
-              <option value="Hades">Hades</option>
-              <option value="Ixion">Ixion</option>
-              <option value="Masamune">Masamune</option>
-              <option value="Pandaemonium">Pandaemonium</option>
-              <option value="Titan">Titan</option>
-            </optgroup>
-            <optgroup label="Meteor - Japan">
-              <option value="Belias">Belias</option>
-              <option value="Mandragora">Mandragora</option>
-              <option value="Ramuh">Ramuh</option>
-              <option value="Shinryu">Shinryu</option>
-              <option value="Unicorn">Unicorn</option>
-              <option value="Valefor">Valefor</option>
-              <option value="Yojimbo">Yojimbo</option>
-              <option value="Zeromus">Zeromus</option>
-            </optgroup>
-            <optgroup label="Aether - America">
-              <option value="Adamantoise">Adamantoise</option>
-              <option value="Cactuar">Cactuar</option>
-              <option value="Faerie">Faerie</option>
-              <option value="Gilgamesh">Gilgamesh</option>
-              <option value="Jenova">Jenova</option>
-              <option value="Midgardsormr">Midgardsormr</option>
-              <option value="Sargatanas">Sargatanas</option>
-              <option value="Siren">Siren</option>
-            </optgroup>
-            <optgroup label="Primal - America">
-              <option value="Behemoth">Behemoth</option>
-              <option value="Excalibur">Excalibur</option>
-              <option value="Exodus">Exodus</option>
-              <option value="Famfrit">Famfrit</option>
-              <option value="Hyperion">Hyperion</option>
-              <option value="Lamia">Lamia</option>
-              <option value="Leviathan">Leviathan</option>
-              <option value="Ultros">Ultros</option>
-            </optgroup>
-            <optgroup label="Crystal - America">
-              <option value="Balmung">Balmung</option>
-              <option value="Brynhildr">Brynhildr</option>
-              <option value="Coeurl">Coeurl</option>
-              <option value="Diabolos">Diabolos</option>
-              <option value="Goblin">Goblin</option>
-              <option value="Malboro">Malboro</option>
-              <option value="Mateus">Mateus</option>
-              <option value="Zalera">Zalera</option>
-            </optgroup>
-            <optgroup label="Dynamis - America">
-              <option value="Halicarnassus">Halicarnassus</option>
-              <option value="Maduin">Maduin</option>
-              <option value="Marilith">Marilith</option>
-              <option value="Seraph">Seraph</option>
-            </optgroup>
-            <optgroup label="Materia - Oceania">
-              <option value="Bismarck">Bismarck</option>
-              <option value="Ravana">Ravana</option>
-              <option value="Sephirot">Sephirot</option>
-              <option value="Sophia">Sophia</option>
-              <option value="Zurvan">Zurvan</option>
-            </optgroup>
-            <optgroup label="陆行鸟 - 中国">
-              <option value="宇宙和音">宇宙和音</option>
-              <option value="幻影群岛">幻影群岛</option>
-              <option value="神意之地">神意之地</option>
-              <option value="萌芽池">萌芽池</option>
-              <option value="沃仙曦染">沃仙曦染</option>
-              <option value="拉诺西亚">拉诺西亚</option>
-              <option value="晨曦王座">晨曦王座</option>
-              <option value="红玉海">红玉海</option>
-            </optgroup>
-            <optgroup label="莫古力 - 中国">
-              <option value="神拳痕">神拳痕</option>
-              <option value="潮风亭">潮风亭</option>
-              <option value="白金幻象">白金幻象</option>
-              <option value="白银乡">白银乡</option>
-              <option value="旅人栈桥">旅人栈桥</option>
-              <option value="梦羽宝境">梦羽宝境</option>
-              <option value="拂晓之间">拂晓之间</option>
-              <option value="龙巢神殿">龙巢神殿</option>
-            </optgroup>
-            <optgroup label="猫小胖 - 中国">
-              <option value="延夏">延夏</option>
-              <option value="海猫茶屋">海猫茶屋</option>
-              <option value="紫水栈桥">紫水栈桥</option>
-              <option value="柔风海湾">柔风海湾</option>
-              <option value="静语庄园">静语庄园</option>
-              <option value="摩杜纳">摩杜纳</option>
-              <option value="琥珀原">琥珀原</option>
-            </optgroup>
-            <optgroup label="豆豆柴 - 中国">
-              <option value="伊修加德">伊修加德</option>
-              <option value="黄金谷">黄金谷</option>
-              <option value="月牙湾">月牙湾</option>
-              <option value="水晶塔">水晶塔</option>
-              <option value="雪松原">雪松原</option>
-              <option value="太阳海岸">太阳海岸</option>
-              <option value="红茶川">红茶川</option>
-              <option value="银泪湖">银泪湖</option>
-            </optgroup>
-            <optgroup label="한국 - 한국">
-              <option value="모그리">모그리</option>
-              <option value="초코보">초코보</option>
-              <option value="카벙클">카벙클</option>
-              <option value="톤베리">톤베리</option>
-              <option value="펜리르">펜리르</option>
-            </optgroup>
-          </select>
+    <div class="container-fluid h-100">
+        <div v-if="isLoading" class="loading-indicator">
+            <loding></loding>
         </div>
-      </div>
-      <div class="freesearch">
-        <p>FREE SEARCH</p>
-        <input class="search-box" type="text" v-model="searchQuery" @keyup.enter="ItemSearch" />
-      </div>
-      <p class="category">CATEGORY SEARCH</p>
-      <div v-for="(items, category) in categories" :key="category">
-        <CategoryPanel :category="category" :items="items" @filter-search="FilterSearch" />
-      </div>
-      <div class="copyright">
-        <p>FINAL FANTASY XIV</p>
-        <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
-      </div>
-    </div>
-    <div class="result">
-      <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
-        <img :src="item.iconUrl" alt="アイコン" class="item-icon">
-        <div class="item-info">
-          <div class="item-name">{{ item.Name }}</div>
-          <div v-if="item.isCraftable" class="item-craftable"><img class="craft"
-              src="https://xivapi.com/cj/1/blacksmith.png"></div>
-        </div>
-      </div>
-    </div>
-    <div class="padding"></div>
-    <div class="info">
-      <!-- ローディングインジケータ: infoLoadingがtrueの場合に表示 -->
-      <div v-if="infoLoading" class="info-loading-indicator">
-        <div class="lds-spinner">
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
-        </div>
-      </div>
-
-      <!-- 情報ボックス: infoLoadingがfalseかつselectedInfoが存在する場合に表示 -->
-      <div v-else-if="selectedInfo" class="info-box">
-        <div class="info-text">
-          <img :src="selectedInfo.iconUrl" alt="アイコン" class="item-icon-lg">
-          <div>
-            <h3>{{ selectedInfo.Name }}</h3>
-            <h6>{{ selectedInfo.Description }}</h6>
-          </div>
-        </div>
-        <div class="contents">
-          <div v-if="selectedInfo.isCraftable" class="d-flex px-3">
-            <h5>必要素材</h5>
-            <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
-          </div>
-          <div v-if="selectedInfo.isCraftable" class="craft-box">
-            <div v-for="material in selectedInfo.materials" :key="material.name">
-              <div class="material-row">
-                <button class="material-button" v-if="material.hasSubMaterials"
-                  @click="material.expanded = !material.expanded">
-                  {{ material.expanded ? '▼' : '▶' }}
-                </button>
-                <div v-else class="button-placeholder"></div>
-                <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン" class="material-icon">
-                <span class="material-name">{{ material.name }}</span>
-                <span class="material-quantity">{{ material.quantity }}個</span>
-                <span v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
-                  class="material-price cheaper-price">
-                  {{ material.subMaterialsTotalCost }} 
-                </span>
-                <span v-else class="material-price">
-                  {{ material.price }} 
-                </span>
-              </div>
-              <div v-if="material.expanded" class="sub-materials">
-                <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name" class="sub-material-row">
-                  <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン" class="material-icon">
-                  <span class="material-name">{{ subMaterial.name }}</span>
-                  <span class="material-quantity">{{ subMaterial.quantity }}個</span>
-                  <span class="material-price">{{ subMaterial.price }} </span>
+        <div class="wrapper">
+            <div class="search-box">
+                <!-- サーバー選択 -->
+                <div class="serverselect">
+                    <p>SERVER SELECT</p>
+                    <div class="select-box-container">
+                        <span class="dropdown-icon">{{ isSelectBoxOpen ? '▼' : '▶' }}</span>
+                        <select id="servers" class="select-box" @focus="isSelectBoxOpen = true"
+                            @blur="isSelectBoxOpen = false" ref="servers" @change="onServerSelect" v-model="selectedServer">
+                            <option disabled="" value="">- Please Choose a Server -</option>
+                            <optgroup v-for="(group, label) in servers" :label="label">
+                                <option v-for="server in group" :value="server">{{ server }}</option>
+                            </optgroup>
+                        </select>
+                    </div>
                 </div>
-              </div>
+                <!-- フリーサーチ -->
+                <div class="freesearch">
+                    <p>FREE SEARCH</p>
+                    <input class="search-input" type="text" v-model="searchQuery" @keyup.enter="ItemSearch" />
+                </div>
+                <div class="category-box">
+                    <p class="category">CATEGORY SEARCH</p>
+                    <div v-for="(items, category) in categories" :key="category">
+                        <CategoryPanel :category="category" :items="items" @filter-search="FilterSearch" />
+                    </div>
+                </div>
+                <div class="copyright">
+                    <p>FINAL FANTASY XIV</p>
+                    <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
+                </div>
             </div>
-            <div class="material-row price-info border-top">
-              <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-              <span class="material-name">総合計価格</span>
-              <span class="material-price">{{ selectedInfo.totalCost }} </span>
+            <div class="result-box">
+                <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
+                    <img :src="item.iconUrl" alt="アイコン" class="item-icon">
+                    <div class="item-info">
+                        <div class="item-name">{{ item.Name }}</div>
+                        <div v-if="item.isCraftable" class="item-craftable"><img class="craft"
+                                src="https://xivapi.com/cj/1/blacksmith.png"></div>
+                    </div>
+                </div>
             </div>
-            <div class="material-row price-info">
-              <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-              <span class="material-name">マーケット価格</span>
-              <span class="material-price">{{ selectedInfo.finalProductPrice }} </span>
+            <div class="info-box">
+                <div v-if="infoLoading" class="info-loading-indicator">
+                    <loding></loding>
+                </div>
+                <div v-if="selectedInfo&&!infoLoading" class="info-main">
+                    <div class="info-text">
+                        <img :src="selectedInfo.iconUrl" alt="アイコン" class="item-icon-lg">
+                        <div>
+                            <div class="info-item d-flex align-items-center">
+                                <h4>{{ selectedInfo.Name }}</h4>
+                                <i class="fa-regular fa-copy fa-xl ms-2" @click="copyText" style="cursor: pointer;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-contents">
+                        <!-- タブメニュー -->
+                        <div class="tab-menu">
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li v-if="selectedInfo.isCraftable" class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                        data-bs-target="#home" type="button" role="tab" aria-controls="home"
+                                        aria-selected="true">素材情報</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" :class="{ active: !selectedInfo.isCraftable }" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+                                        type="button" role="tab" aria-controls="profile" aria-selected="false">相場情報</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
+                                        type="button" role="tab" aria-controls="contact" aria-selected="false">開発中</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <div v-if="selectedInfo.isCraftable" class="d-flex px-3">
+                                        <h5>必要素材</h5>
+                                        <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
+                                    </div>
+                                    <div v-if="selectedInfo.isCraftable" class="craft-box">
+                                        <div v-for="material in selectedInfo.materials" :key="material.name">
+                                            <div class="material-row">
+                                                <button class="material-button" v-if="material.hasSubMaterials"
+                                                    @click="material.expanded = !material.expanded">
+                                                    {{ material.expanded ? '▼' : '▶' }}
+                                                </button>
+                                                <div v-else class="button-placeholder"></div>
+                                                <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン"
+                                                    class="material-icon">
+                                                <span class="material-name">{{ material.name }}</span>
+                                                <span class="material-quantity">{{ material.quantity }}個</span>
+                                                <span
+                                                    v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
+                                                    class="material-price cheaper-price">
+                                                    {{ material.subMaterialsTotalCost }} 
+                                                </span>
+                                                <span v-else class="material-price">
+                                                    {{ material.price }} 
+                                                </span>
+                                            </div>
+                                            <div v-if="material.expanded" class="sub-materials">
+                                                <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name"
+                                                    class="sub-material-row">
+                                                    <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン"
+                                                        class="material-icon">
+                                                    <span class="material-name">{{ subMaterial.name }}</span>
+                                                    <span class="material-quantity">{{ subMaterial.quantity }}個</span>
+                                                    <span class="material-price">{{ subMaterial.price }} </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="material-row price-info border-top">
+                                            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+                                            <span class="material-name">総合計価格</span>
+                                            <span class="material-price">{{ selectedInfo.totalCost }} </span>
+                                        </div>
+                                        <div class="material-row price-info">
+                                            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+                                            <span class="material-name">マーケット価格</span>
+                                            <span class="material-price">{{ selectedInfo.finalProductPrice }} </span>
+                                        </div>
+                                        <div class="material-row price-info">
+                                            <div class="button-placeholder"></div>
+                                            <span class="material-name">利益率</span>
+                                            <span class="material-price">{{ ((selectedInfo.finalProductPrice -
+                                                selectedInfo.totalCost) /
+                                                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" :class="{ 'show active': !selectedInfo.isCraftable }" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                    <div class="history">
+                                        <div v-if="selectedInfo.sales" class="history-section">
+                                            <h5>販売履歴</h5>
+                                            <div class="history-table">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="_sticky">#</th>
+                                                            <th class="_sticky">HQ</th>
+                                                            <th class="_sticky">単価</th>
+                                                            <th class="_sticky">販売日</th>
+                                                            <th class="_sticky">購入者</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(sale, index) in selectedInfo.sales.entries"
+                                                            :key="sale.timestamp">
+                                                            <td>{{ index + 1 }}</td>
+                                                            <td v-if="sale.hq"></td>
+                                                            <td v-else></td>
+                                                            <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
+                                                            <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}
+                                                            </td>
+                                                            <td>{{ sale.buyerName }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div v-if="selectedInfo.current" class="history-section">
+                                            <h5>現在の市場価格</h5>
+                                            <div class="history-table">
+                                                <table>
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="_sticky">#</th>
+                                                            <th class="_sticky">HQ</th>
+                                                            <th class="_sticky">単価</th>
+                                                            <th class="_sticky">最終確認日</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="(listing, index) in selectedInfo.current.listings"
+                                                            :key="listing.listingID">
+                                                            <td>{{ index + 1 }}</td>
+                                                            <td v-if="listing.hq"></td>
+                                                            <td v-else></td>
+                                                            <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
+                                                            <td>{{ new Date(listing.lastReviewTime *
+                                                                1000).toLocaleDateString() }}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+                                    開発中
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div class="material-row price-info">
-              <div class="button-placeholder"></div>
-              <span class="material-name">利益率</span>
-              <span class="material-price">{{ ((selectedInfo.finalProductPrice - selectedInfo.totalCost) /
-                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
-            </div>
-          </div>
-          <div class="history">
-            <div v-if="selectedInfo.sales" class="history-section">
-              <h5>販売履歴</h5>
-              <div class="history-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th class="_sticky">#</th>
-                      <th class="_sticky">HQ</th>
-                      <th class="_sticky">単価</th>
-                      <th class="_sticky">販売日</th>
-                      <th class="_sticky">購入者</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(sale, index) in selectedInfo.sales.entries" :key="sale.timestamp">
-                      <td>{{ index + 1 }}</td>
-                      <td v-if="sale.hq"></td>
-                      <td v-else></td>
-                      <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
-                      <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}</td>
-                      <td>{{ sale.buyerName }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <div v-if="selectedInfo.current" class="history-section">
-              <h5>現在の市場価格</h5>
-              <div class="history-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th class="_sticky">#</th>
-                      <th class="_sticky">HQ</th>
-                      <th class="_sticky">単価</th>
-                      <th class="_sticky">最終確認日</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(listing, index) in selectedInfo.current.listings" :key="listing.listingID">
-                      <td>{{ index + 1 }}</td>
-                      <td v-if="listing.hq"></td>
-                      <td v-else></td>
-                      <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
-                      <td>{{ new Date(listing.lastReviewTime * 1000).toLocaleDateString() }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-
-  </div>
 </template>
-
-
 <script>
+import Loding from './components/Loding.vue';
 import CategoryPanel from './components/CategoryPanel.vue';
-
 export default {
-  components: {
-    CategoryPanel,
-  },
-  data() {
-    return {
-      searchQuery: '',
-      isLoading: true,
-      infoLoading: false,
-      isSelectBoxOpen: false,
-      selectedServer: 'Chocobo',
-      searchResults: [],
-      selectedInfo: null,
-      categories: {
-        'メインアーム/サブアーム': [
-          { id: '060102', pairId: '10' },
-          { id: '060103', pairId: '11' },
-          { id: '060170', pairId: '76' },
-          { id: '060181', pairId: '86' },
-          { id: '060104', pairId: '13' },
-          { id: '060183', pairId: '88' },
-          { id: '060101', pairId: '9' },
-          { id: '060177', pairId: '83' },
-          { id: '060106', pairId: '73' },
-          { id: '060105', pairId: '12' },
-          { id: '060172', pairId: '77' },
-          { id: '060182', pairId: '87' },
-          { id: '060108', pairId: '14' },
-          { id: '060109', pairId: '16' },
-          { id: '060176', pairId: '84' },
-          { id: '060107', pairId: '15' },
-          { id: '060178', pairId: '85' },
-          { id: '060171', pairId: '78' },
-          { id: '060184', pairId: '89' },
-          { id: '060112', pairId: '19' },
-          { id: '060113', pairId: '20' },
-          { id: '060114', pairId: '21' },
-          { id: '060115', pairId: '22' },
-          { id: '060116', pairId: '23' },
-          { id: '060117', pairId: '24' },
-          { id: '060118', pairId: '25' },
-          { id: '060119', pairId: '26' },
-          { id: '060120', pairId: '27' },
-          { id: '060121', pairId: '28' },
-          { id: '060122', pairId: '29' },
-          { id: '060123', pairId: '30' }
-        ],
-        '防具/アクセサリ': [
-          { id: '060110', pairId: '17' },
-          { id: '060124', pairId: '31' },
-          { id: '060126', pairId: '33' },
-          { id: '060129', pairId: '36' },
-          { id: '060128', pairId: '35' },
-          { id: '060130', pairId: '37' },
-          { id: '060133', pairId: '40' },
-          { id: '060132', pairId: '39' },
-          { id: '060134', pairId: '41' },
-          { id: '060135', pairId: '42' }
-        ],
-        'その他': [
-          { id: '060136', pairId: '43' },
-          { id: '060137', pairId: '44' },
-          { id: '060146', pairId: '45' },
-          { id: '060138', pairId: '46' },
-          { id: '060139', pairId: '47' },
-          { id: '060140', pairId: '48' },
-          { id: '060141', pairId: '49' },
-          { id: '060142', pairId: '50' },
-          { id: '060143', pairId: '51' },
-          { id: '060144', pairId: '52' },
-          { id: '060145', pairId: '53' },
-          { id: '060147', pairId: '54' },
-          { id: '060148', pairId: '55' },
-          { id: '060150', pairId: '57' },
-          { id: '060151', pairId: '58' },
-          { id: '060152', pairId: '59' },
-          { id: '060153', pairId: '60' },
-          { id: '060154', pairId: '74' },
-          { id: '060185', pairId: '90' },
-          { id: '060155', pairId: '75' },
-          { id: '060169', pairId: '79' },
-          { id: '060173', pairId: '80' }
-        ],
-        'ハウジング': [
-          { id: '060160', pairId: '65' },
-          { id: '060161', pairId: '66' },
-          { id: '060168', pairId: '67' },
-          { id: '060164', pairId: '56' },
-          { id: '060165', pairId: '68' },
-          { id: '060162', pairId: '69' },
-          { id: '060163', pairId: '70' },
-          { id: '060166', pairId: '71' },
-          { id: '060167', pairId: '72' },
-          { id: '060174', pairId: '81' },
-          { id: '060175', pairId: '82' }
-        ],
-      },
-    };
-  },
-  created() {
-    this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
-    const savedServer = localStorage.getItem('selectedServer');
-    if (savedServer) {
-      this.selectedServer = savedServer;
-    } else {
-      this.selectedServer = 'chocobo';
-    }
-  },
-  methods: {
-    async loadJsonData() {
-      try {
-        this.isLoading = true;
-        const itemsResponse = await fetch('/json/Item.json');
-        const recipeResponse = await fetch('/json/Recipe.json');
-        const classJobCategoriesResponse = await fetch('/json/ClassJobCategory.json');
-        if (!itemsResponse.ok || !recipeResponse.ok || !classJobCategoriesResponse.ok) {
-          throw new Error('JSONファイルの読み込みに失敗しました。');
+    components: {
+        Loding,
+        CategoryPanel,
+    },
+    data() {
+        return {
+            isLoading: true,
+            infoLoading: false,
+            isSelectBoxOpen: false,
+            selectedServer: '',
+            selectedInfo: null,
+            searchResults: [],
+            searchQuery: '',
+            servers: {
+                'Chaos - Europe': ['Cerberus', 'Louisoix', 'Moogle'],
+                'Light - Europe': ['Alpha', 'Lich', 'Odin'],
+            },
+            categories: {
+                'メインアーム/サブアーム': [
+                    { id: '060102', pairId: '10' },
+                    { id: '060103', pairId: '11' },
+                    { id: '060170', pairId: '76' },
+                    { id: '060181', pairId: '86' },
+                    { id: '060104', pairId: '13' },
+                    { id: '060183', pairId: '88' },
+                    { id: '060101', pairId: '9' },
+                    { id: '060177', pairId: '83' },
+                    { id: '060106', pairId: '73' },
+                    { id: '060105', pairId: '12' },
+                    { id: '060172', pairId: '77' },
+                    { id: '060182', pairId: '87' },
+                    { id: '060108', pairId: '14' },
+                    { id: '060109', pairId: '16' },
+                    { id: '060176', pairId: '84' },
+                    { id: '060107', pairId: '15' },
+                    { id: '060178', pairId: '85' },
+                    { id: '060171', pairId: '78' },
+                    { id: '060184', pairId: '89' },
+                    { id: '060112', pairId: '19' },
+                    { id: '060113', pairId: '20' },
+                    { id: '060114', pairId: '21' },
+                    { id: '060115', pairId: '22' },
+                    { id: '060116', pairId: '23' },
+                    { id: '060117', pairId: '24' },
+                    { id: '060118', pairId: '25' },
+                    { id: '060119', pairId: '26' },
+                    { id: '060120', pairId: '27' },
+                    { id: '060121', pairId: '28' },
+                    { id: '060122', pairId: '29' },
+                    { id: '060123', pairId: '30' }
+                ],
+                '防具/アクセサリ': [
+                    { id: '060110', pairId: '17' },
+                    { id: '060124', pairId: '31' },
+                    { id: '060126', pairId: '33' },
+                    { id: '060129', pairId: '36' },
+                    { id: '060128', pairId: '35' },
+                    { id: '060130', pairId: '37' },
+                    { id: '060133', pairId: '40' },
+                    { id: '060132', pairId: '39' },
+                    { id: '060134', pairId: '41' },
+                    { id: '060135', pairId: '42' }
+                ],
+                'その他': [
+                    { id: '060136', pairId: '43' },
+                    { id: '060137', pairId: '44' },
+                    { id: '060146', pairId: '45' },
+                    { id: '060138', pairId: '46' },
+                    { id: '060139', pairId: '47' },
+                    { id: '060140', pairId: '48' },
+                    { id: '060141', pairId: '49' },
+                    { id: '060142', pairId: '50' },
+                    { id: '060143', pairId: '51' },
+                    { id: '060144', pairId: '52' },
+                    { id: '060145', pairId: '53' },
+                    { id: '060147', pairId: '54' },
+                    { id: '060148', pairId: '55' },
+                    { id: '060150', pairId: '57' },
+                    { id: '060151', pairId: '58' },
+                    { id: '060152', pairId: '59' },
+                    { id: '060153', pairId: '60' },
+                    { id: '060154', pairId: '74' },
+                    { id: '060185', pairId: '90' },
+                    { id: '060155', pairId: '75' },
+                    { id: '060169', pairId: '79' },
+                    { id: '060173', pairId: '80' }
+                ],
+                'ハウジング': [
+                    { id: '060160', pairId: '65' },
+                    { id: '060161', pairId: '66' },
+                    { id: '060168', pairId: '67' },
+                    { id: '060164', pairId: '56' },
+                    { id: '060165', pairId: '68' },
+                    { id: '060162', pairId: '69' },
+                    { id: '060163', pairId: '70' },
+                    { id: '060166', pairId: '71' },
+                    { id: '060167', pairId: '72' },
+                    { id: '060174', pairId: '81' },
+                    { id: '060175', pairId: '82' }
+                ],
+            },
+        };
+    },
+    created() {
+        this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
+        const savedServer = localStorage.getItem('selectedServer');
+        if (savedServer) {
+            this.selectedServer = savedServer;
+        } else {
+            this.selectedServer = 'chocobo';
         }
-        this.itemsData = await itemsResponse.json();
-        this.recipeData = await recipeResponse.json();
-        this.classJobCategories = await classJobCategoriesResponse.json();
-      } catch (error) {
-        console.error('JSON読み込みエラー:', error);
-      } finally {
-        this.isLoading = false;
-      }
     },
-    ItemSearch() {
-      try {
-        this.searchResults = this.itemsData.filter(item =>
-          item.Name.includes(this.searchQuery)
-        ).map(item => ({
-          ...item,
-          iconUrl: this.getIconUrl(item.Icon),
-          isCraftable: this.isCraftable(item.ItemId)
-        }));
-      } catch (error) {
-        console.error('検索エラー:', error);
-      }
-    },
-    FilterSearch(filterData) {
-      try {
-        const selectedJobId = this.findClassJobId(filterData.selectedJob);
+    methods: {
+        async loadJsonData() {
+            try {
+                this.isLoading = true;
+                const itemsResponse = await fetch('/json/Item.json');
+                const recipeResponse = await fetch('/json/Recipe.json');
+                const classJobCategoriesResponse = await fetch('/json/ClassJobCategory.json');
+                if (!itemsResponse.ok || !recipeResponse.ok || !classJobCategoriesResponse.ok) {
+                    throw new Error('JSONファイルの読み込みに失敗しました。');
+                }
+                this.itemsData = await itemsResponse.json();
+                this.recipeData = await recipeResponse.json();
+                this.classJobCategories = await classJobCategoriesResponse.json();
+            } catch (error) {
+                console.error('JSON読み込みエラー:', error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        ItemSearch() {
+            try {
+                this.searchResults = this.itemsData.filter(item =>
+                    item.Name.includes(this.searchQuery)
+                ).map(item => ({
+                    ...item,
+                    iconUrl: this.getIconUrl(item.Icon),
+                    isCraftable: this.isCraftable(item.ItemId)
+                }));
+            } catch (error) {
+                console.error('検索エラー:', error);
+            }
+        },
+        FilterSearch(filterData) {
+            try {
+                const selectedJobId = this.findClassJobId(filterData.selectedJob);
 
-        this.searchResults = this.itemsData.filter(item => {
-          // メインアーム/サブアームまたは防具/アクセサリの場合
-          if (filterData.category === 'メインアーム/サブアーム' || filterData.category === '防具/アクセサリ') {
-            return item.ItemSearchCategory === filterData.pairId &&
-              (
-                (filterData.category === 'メインアーム/サブアーム' && item.LevelEquip >= filterData.level) ||
-                (
-                  filterData.category === '防具/アクセサリ' && item.LevelEquip >= filterData.level &&
-                  selectedJobId.includes(String(item.ClassJobCategory))
-                )
-              );
-          }
-          // それ以外のカテゴリの場合
-          else {
-            return item.ItemSearchCategory === filterData.pairId;
-          }
-        }).map(item => ({
-          ...item,
-          iconUrl: this.getIconUrl(item.Icon),
-          isCraftable: this.isCraftable(item.ItemId)
-        }));
-      } catch (error) {
-        console.error('検索エラー:', error);
-      }
-    },
-    findClassJobId(selectedJob) {
-      const matchingIds = [];
-      for (const category of this.classJobCategories) {
-        if (category[selectedJob] === "TRUE") {
-          matchingIds.push(category.ID);
-        }
-      }
-      return matchingIds;
-    },
-    getIconUrl(imageId) {
-      const baseId = Math.floor(imageId / 1000) * 1000; // 1万の位を基にベースIDを算出
-      const formattedBaseId = baseId.toString().padStart(6, '0'); // ベースIDを6桁でフォーマット
-      const formattedImageId = imageId.toString().padStart(6, '0'); // 画像IDを6桁でフォーマット
-      return `https://xivapi.com/i/${formattedBaseId}/${formattedImageId}.png`; // 完全なURLを生成
-    },
-    isCraftable(itemKey) {
-      return this.recipeData.some(recipe => recipe.ItemResult === itemKey);
-    },
-    onServerSelect() {
-      this.selectedServer = this.$refs.servers.value;
-      // 選択されたサーバーをローカルストレージに保存
-      localStorage.setItem('selectedServer', this.selectedServer);
-    },
-    async getLowestPrice(itemId) {
-      // Universalis APIを使用してアイテムの価格を取得
-      const response = await fetch(`https://universalis.app/api/${this.selectedServer}/${itemId}`);
-      const data = await response.json();
-      if (data.minPriceHQ === 0) {
-        return data.minPrice;
-      } else {
-        return data.minPriceHQ;
-      }
-    },
-    async salesHistory(itemId) {
-      try {
-        const response = await fetch(`https://universalis.app/api/v2/history/${this.selectedServer}/${itemId}`);
-        if (!response.ok) {
-          throw new Error('サーバーからの応答がありません');
-        }
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('salesHistory取得エラー:', error);
-        return null;
-      }
-    },
+                this.searchResults = this.itemsData.filter(item => {
+                    // メインアーム/サブアームまたは防具/アクセサリの場合
+                    if (filterData.category === 'メインアーム/サブアーム' || filterData.category === '防具/アクセサリ') {
+                        return item.ItemSearchCategory === filterData.pairId &&
+                            (
+                                (filterData.category === 'メインアーム/サブアーム' && item.LevelEquip >= filterData.level) ||
+                                (
+                                    filterData.category === '防具/アクセサリ' && item.LevelEquip >= filterData.level &&
+                                    selectedJobId.includes(String(item.ClassJobCategory))
+                                )
+                            );
+                    }
+                    // それ以外のカテゴリの場合
+                    else {
+                        return item.ItemSearchCategory === filterData.pairId;
+                    }
+                }).map(item => ({
+                    ...item,
+                    iconUrl: this.getIconUrl(item.Icon),
+                    isCraftable: this.isCraftable(item.ItemId)
+                }));
+            } catch (error) {
+                console.error('検索エラー:', error);
+            }
+        },
+        findClassJobId(selectedJob) {
+            const matchingIds = [];
+            for (const category of this.classJobCategories) {
+                if (category[selectedJob] === "TRUE") {
+                    matchingIds.push(category.ID);
+                }
+            }
+            return matchingIds;
+        },
+        getIconUrl(imageId) {
+            const baseId = Math.floor(imageId / 1000) * 1000; // 1万の位を基にベースIDを算出
+            const formattedImageId = imageId.toString().padStart(6, '0'); // 画像IDを6桁でフォーマット
+            return `https://res.cloudinary.com/dke932tm8/image/upload/v1706168566/icon/${formattedImageId}.png`; // 完全なURLを生成
+        },
+        isCraftable(itemKey) {
+            return this.recipeData.some(recipe => recipe.ItemResult === itemKey);
+        },
+        onServerSelect() {
+            this.selectedServer = this.$refs.servers.value;
+            // 選択されたサーバーをローカルストレージに保存
+            localStorage.setItem('selectedServer', this.selectedServer);
+        },
+        async getLowestPrice(itemId) {
+            // Universalis APIを使用してアイテムの価格を取得
+            const response = await fetch(`https://universalis.app/api/${this.selectedServer}/${itemId}`);
+            const data = await response.json();
+            if (data.minPriceHQ === 0) {
+                return data.minPrice;
+            } else {
+                return data.minPriceHQ;
+            }
+        },
+        async salesHistory(itemId) {
+            try {
+                const response = await fetch(`https://universalis.app/api/v2/history/${this.selectedServer}/${itemId}`);
+                if (!response.ok) {
+                    throw new Error('サーバーからの応答がありません');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('salesHistory取得エラー:', error);
+                return null;
+            }
+        },
 
-    async currentHistory(itemId) {
-      try {
-        const response = await fetch(`https://universalis.app/api/v2/${this.selectedServer}/${itemId}`);
-        if (!response.ok) {
-          throw new Error('サーバーからの応答がありません');
-        }
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.error('currentHistory取得エラー:', error);
-        return null;
-      }
-    },
-    async selectItem(item) {
-      try {
-        this.infoLoading = true;
-        const selectedItem = { ...item, materials: [] }; // 空の配列で materials を初期化
-        if (item.isCraftable) {
-          const recipe = this.recipeData.find(recipe => recipe.ItemResult === item.ItemId);
-          if (recipe) {
-            let totalCost = 0;
-            const materialsPromises = [];
+        async currentHistory(itemId) {
+            try {
+                const response = await fetch(`https://universalis.app/api/v2/${this.selectedServer}/${itemId}`);
+                if (!response.ok) {
+                    throw new Error('サーバーからの応答がありません');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('currentHistory取得エラー:', error);
+                return null;
+            }
+        },
+        async selectItem(item) {
+            try {
+                this.infoLoading = true;
+                const selectedItem = { ...item, materials: [] }; // 空の配列で materials を初期化
+                if (item.isCraftable) {
+                    const recipe = this.recipeData.find(recipe => recipe.ItemResult === item.ItemId);
+                    if (recipe) {
+                        let totalCost = 0;
+                        const materialsPromises = [];
 
+                        for (let i = 0; i <= 9; i++) {
+                            const ingredientItemId = recipe[`ItemIngredient[${i}]`];
+                            const quantity = recipe[`AmountIngredient[${i}]`];
+                            if (ingredientItemId && quantity > 0) {
+                                materialsPromises.push(this.getMaterialDetails(ingredientItemId, quantity));
+                            }
+                        }
+
+                        const materials = await Promise.all(materialsPromises);
+                        materials.forEach(material => {
+                            if (material) {
+                                selectedItem.materials.push(material); // ここで push する
+                                totalCost += material.price * material.quantity;
+                            }
+                        });
+
+                        selectedItem.totalCost = totalCost;
+                        selectedItem.finalProductPrice = await this.getLowestPrice(item.ItemId);
+                        selectedItem.sales = await this.salesHistory(item.ItemId);
+                        selectedItem.current = await this.currentHistory(item.ItemId);
+                    }
+                } else {
+                    selectedItem.sales = await this.salesHistory(item.ItemId);
+                    selectedItem.current = await this.currentHistory(item.ItemId);
+                }
+                this.selectedInfo = selectedItem;
+                console.log(this.selectedInfo)
+            } catch (error) {
+                console.error('アイテム選択エラー:', error);
+            }
+            finally {
+                this.infoLoading = false; // ローディング終了
+            }
+        },
+        async getMaterialDetails(ingredientItemId, quantity) {
+            const price = await this.getLowestPrice(ingredientItemId);
+            const materialItem = this.itemsData.find(i => i.ItemId === ingredientItemId);
+            const subMaterials = await this.getSubMaterials(ingredientItemId);
+            const subMaterialsTotalCost = subMaterials.reduce(
+                (total, subMaterial) => total + (subMaterial.price * subMaterial.quantity),
+                0
+            );
+
+            return {
+                name: materialItem ? materialItem.Name : '不明な素材',
+                quantity: quantity,
+                iconUrl: materialItem ? this.getIconUrl(materialItem.Icon) : null,
+                price: price,
+                isCheaper: subMaterialsTotalCost < price,
+                subMaterialsTotalCost: subMaterialsTotalCost,
+                expanded: false,
+                hasSubMaterials: subMaterials.length > 0, // subMaterialsが存在する場合はtrue, そうでなければfalse
+                subMaterials: subMaterials
+            };
+        },
+        async getSubMaterials(itemId) {
+            const recipe = this.recipeData.find(recipe => recipe.ItemResult === itemId);
+            if (!recipe) return [];
+
+            const subMaterialsPromises = [];
             for (let i = 0; i <= 9; i++) {
-              const ingredientItemId = recipe[`ItemIngredient[${i}]`];
-              const quantity = recipe[`AmountIngredient[${i}]`];
-              if (ingredientItemId && quantity > 0) {
-                materialsPromises.push(this.getMaterialDetails(ingredientItemId, quantity));
-              }
+                const ingredientItemId = recipe[`ItemIngredient[${i}]`];
+                const quantity = recipe[`AmountIngredient[${i}]`];
+                if (ingredientItemId && quantity > 0) {
+                    subMaterialsPromises.push(this.getMaterialDetails(ingredientItemId, quantity));
+                }
             }
 
-            const materials = await Promise.all(materialsPromises);
-            materials.forEach(material => {
-              if (material) {
-                selectedItem.materials.push(material); // ここで push する
-                totalCost += material.price * material.quantity;
-              }
-            });
-
-            selectedItem.totalCost = totalCost;
-            selectedItem.finalProductPrice = await this.getLowestPrice(item.ItemId);
-            selectedItem.sales = await this.salesHistory(item.ItemId);
-            selectedItem.current = await this.currentHistory(item.ItemId);
-          }
-        } else {
-          selectedItem.sales = await this.salesHistory(item.ItemId);
-          selectedItem.current = await this.currentHistory(item.ItemId);
+            return await Promise.all(subMaterialsPromises);
+        },
+        copyText() {
+            // selectedInfo.Nameのテキストをコピー
+            navigator.clipboard.writeText(this.selectedInfo.Name).then(() => {
+            })
+                .catch(err => {
+                    console.error('コピーに失敗しました:', err);
+                });
         }
-        this.selectedInfo = selectedItem;
-        console.log(this.selectedInfo)
-      } catch (error) {
-        console.error('アイテム選択エラー:', error);
-      }
-      finally {
-        this.infoLoading = false; // ローディング終了
-      }
     },
-    async getMaterialDetails(ingredientItemId, quantity) {
-      const price = await this.getLowestPrice(ingredientItemId);
-      const materialItem = this.itemsData.find(i => i.ItemId === ingredientItemId);
-      const subMaterials = await this.getSubMaterials(ingredientItemId);
-      const subMaterialsTotalCost = subMaterials.reduce(
-        (total, subMaterial) => total + (subMaterial.price * subMaterial.quantity),
-        0
-      );
-
-      return {
-        name: materialItem ? materialItem.Name : '不明な素材',
-        quantity: quantity,
-        iconUrl: materialItem ? this.getIconUrl(materialItem.Icon) : null,
-        price: price,
-        isCheaper: subMaterialsTotalCost < price,
-        subMaterialsTotalCost: subMaterialsTotalCost,
-        expanded: false,
-        hasSubMaterials: subMaterials.length > 0, // subMaterialsが存在する場合はtrue, そうでなければfalse
-        subMaterials: subMaterials
-      };
-    },
-    async getSubMaterials(itemId) {
-      const recipe = this.recipeData.find(recipe => recipe.ItemResult === itemId);
-      if (!recipe) return [];
-
-      const subMaterialsPromises = [];
-      for (let i = 0; i <= 9; i++) {
-        const ingredientItemId = recipe[`ItemIngredient[${i}]`];
-        const quantity = recipe[`AmountIngredient[${i}]`];
-        if (ingredientItemId && quantity > 0) {
-          subMaterialsPromises.push(this.getMaterialDetails(ingredientItemId, quantity));
-        }
-      }
-
-      return await Promise.all(subMaterialsPromises);
-    },
-  },
 };
 </script>
-
-<style scoped>
+<style>
 .loading-indicator {
-  position: fixed;
-  /* 画面に固定 */
-  top: 0;
-  left: 0;
-  width: 100vw;
-  /* ビューポートの全幅 */
-  height: 100vh;
-  /* ビューポートの全高 */
-  background-color: #2D302D;
-  /* 半透明の背景 */
-  display: flex;
-  justify-content: center;
-  /* 中央揃え */
-  align-items: center;
-  /* 中央揃え */
-  z-index: 1000;
-  /* 他の要素より上に表示 */
+    position: fixed;
+    /* 画面に固定 */
+    top: 0;
+    left: 0;
+    width: 100vw;
+    /* ビューポートの全幅 */
+    height: 100vh;
+    /* ビューポートの全高 */
+    background-color: #2D302D;
+    /* 半透明の背景 */
+    display: flex;
+    justify-content: center;
+    /* 中央揃え */
+    align-items: center;
+    /* 中央揃え */
+    z-index: 1000;
+    /* 他の要素より上に表示 */
 }
 
 .info-loading-indicator {
-  top: 0;
-  left: 0;
-  width: 100%;
-  /* infoセクションの幅に合わせる */
-  height: 100%;
-  /* infoセクションの高さに合わせる */
-  padding: 0;
-  background-color: rgba(45, 48, 45, 1);
-  /* 半透明の背景色 */
-  display: flex;
-  justify-content: center;
-  /* 中央揃え */
-  align-items: center;
-  /* 中央揃え */
-  z-index: 10;
-  /* 必要に応じてz-indexを調整 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    /* infoセクションの幅に合わせる */
+    height: 100%;
+    /* infoセクションの高さに合わせる */
+    padding: 0;
+    background-color: rgba(45, 48, 45, 1);
+    /* 半透明の背景色 */
+    display: flex;
+    justify-content: center;
+    /* 中央揃え */
+    align-items: center;
+    /* 中央揃え */
+    z-index: 10;
+    /* 必要に応じてz-indexを調整 */
 }
 
-.lds-spinner {
-  color: official;
-  display: inline-block;
-  position: relative;
-  width: 80px;
-  height: 80px;
-  display: flex;
-}
-
-.lds-spinner div {
-  transform-origin: 40px 40px;
-  animation: lds-spinner 1.2s linear infinite;
-}
-
-.lds-spinner div:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  top: 3px;
-  left: 37px;
-  width: 6px;
-  height: 18px;
-  border-radius: 20%;
-  background: #fff;
-}
-
-.lds-spinner div:nth-child(1) {
-  transform: rotate(0deg);
-  animation-delay: -1.1s;
-}
-
-.lds-spinner div:nth-child(2) {
-  transform: rotate(30deg);
-  animation-delay: -1s;
-}
-
-.lds-spinner div:nth-child(3) {
-  transform: rotate(60deg);
-  animation-delay: -0.9s;
-}
-
-.lds-spinner div:nth-child(4) {
-  transform: rotate(90deg);
-  animation-delay: -0.8s;
-}
-
-.lds-spinner div:nth-child(5) {
-  transform: rotate(120deg);
-  animation-delay: -0.7s;
-}
-
-.lds-spinner div:nth-child(6) {
-  transform: rotate(150deg);
-  animation-delay: -0.6s;
-}
-
-.lds-spinner div:nth-child(7) {
-  transform: rotate(180deg);
-  animation-delay: -0.5s;
-}
-
-.lds-spinner div:nth-child(8) {
-  transform: rotate(210deg);
-  animation-delay: -0.4s;
-}
-
-.lds-spinner div:nth-child(9) {
-  transform: rotate(240deg);
-  animation-delay: -0.3s;
-}
-
-.lds-spinner div:nth-child(10) {
-  transform: rotate(270deg);
-  animation-delay: -0.2s;
-}
-
-.lds-spinner div:nth-child(11) {
-  transform: rotate(300deg);
-  animation-delay: -0.1s;
-}
-
-.lds-spinner div:nth-child(12) {
-  transform: rotate(330deg);
-  animation-delay: 0s;
-}
-
-@keyframes lds-spinner {
-  0% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-  }
+.wrapper {
+    display: flex;
+    width: 100%;
+    height: 100%;
 }
 
 .search-box {
-  width: 250px;
-  margin-left: 10px;
-  border-radius: 5px;
-  height: 25px;
-  font-size: 13px;
-  background-color: #545454;
-  border: solid 1px #454044;
-  color: #fff;
-}
-
-.search-container {
-  width: 290px;
-  height: calc(100vh - 20px);
-  position: relative;
+    flex: 0 0 auto;
+    position: relative;
+    width: 260px;
+    height: 100%;
+    padding-top: 10px;
 }
 
 .serverselect {
-  width: 270px;
-  margin: 10px 10px 5px 10px;
-  padding: 3px 10px 7px 10px;
-  border: 2px solid #515151;
-  border-radius: 10px;
-  padding-bottom: 5px;
+    padding: 3px 10px 7px 10px;
+    height: fit-content;
+    border: 2px solid #515151;
+    border-radius: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 5px;
 }
 
-
 .serverselect p {
-  color: #7D7463;
-  font-size: 20px;
-  margin-bottom: 0;
-  margin-left: 10px;
+    color: #7D7463;
+    font-size: 15px;
+    margin-bottom: 0;
+    margin-left: 10px;
 }
 
 .select-box-container {
-  display: flex;
-  align-items: center;
-}
-
-.select-icon {
-  margin-right: 10px;
-  /* アイコンとセレクトボックスの間隔 */
+    display: flex;
+    align-items: center;
 }
 
 .dropdown-icon {
-  position: absolute;
-  color: #fff;
-  top: 51px;
-  left: 35px;
-  z-index: 100;
-  font-size: 12px;
-  /* セレクトボックスの上に表示 */
+    position: absolute;
+    color: #fff;
+    top: 43px;
+    left: 35px;
+    z-index: 100;
+    font-size: 12px;
+    /* セレクトボックスの上に表示 */
 }
 
 .select-box {
-  flex-grow: 1;
-  padding: 3px 0;
-  padding-left: 30px;
-  width: 246px;
-  height: 25px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  color: #fff;
-  background: linear-gradient(to bottom, #2F2F2F 0%, #272727 50%, #2F2F2F 100%);
-  background-color: #2F2F2F;
-  border: 1px solid #222222;
-  border-radius: 9999px;
-  font-size: 12px;
-}
-
-.select-box:focus {
-  outline: none;
+    flex-grow: 1;
+    padding: 3px 0;
+    padding-left: 30px;
+    height: 25px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    color: #fff;
+    background: linear-gradient(to bottom, #2F2F2F 0%, #272727 50%, #2F2F2F 100%);
+    background-color: #2F2F2F;
+    border: 1px solid #222222;
+    border-radius: 9999px;
+    font-size: 12px;
 }
 
 .freesearch {
-  width: 270px;
-  margin: 10px 10px 5px 10px;
-  border: 2px solid #515151;
-  border-radius: 10px;
-  padding-bottom: 5px;
+    padding: 3px 10px 7px 10px;
+    height: fit-content;
+    border: 2px solid #515151;
+    border-radius: 10px;
+    padding-bottom: 10px;
 }
 
 .freesearch p {
-  color: #7D7463;
-  font-size: 20px;
-  margin-bottom: 0;
-  margin-left: 10px;
+    color: #7D7463;
+    font-size: 15px;
+    margin-bottom: 0;
+    margin-left: 10px;
 }
 
-.category {
-  color: #7D7463;
-  font-size: 20px;
-  margin-bottom: 0;
-  margin-left: 20px;
+.search-input {
+    flex-grow: 1;
+    width: 100%;
+    border-radius: 5px;
+    height: 25px;
+    font-size: 13px;
+    background-color: #545454;
+    border: solid 1px #454044;
+    color: #fff;
+}
+
+.category-box p {
+    color: #7D7463;
+    font-size: 15px;
+    margin-bottom: 0;
+    margin-left: 5px;
 }
 
 .copyright {
-  font-size: 12px;
-  color: #FFF;
-  text-align: center;
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 10px;
+    font-size: 10px;
+    color: #FFF;
+    width: calc(100% - 1.5rem);
+    text-align: center;
 }
 
 .copyright p {
-  margin-bottom: 0;
+    margin-bottom: 0;
+    color: #fff;
 }
 
-.result {
-  width: 25%;
-  height: calc(100vh - 20px);
-  font-size: 14px;
-  overflow-y: auto;
-  padding: 10px;
-  border-left: solid #575757 2px;
+.result-box {
+    flex: 0 0 auto;
+    height: 100%;
+    width: calc(calc(100vw - 285px)* 0.35);
+    font-size: 14px;
+    overflow-y: auto;
+    padding: 10px;
+    border-left: solid #575757 2px;
+    border-right: solid #575757 2px;
 }
 
-.craft {
-  width: 20px;
-  height: 20px;
-}
-
-::-webkit-scrollbar {
-  width: 7px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #7A7A7A;
-  border-radius: 3px;
+.result-box>div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .item-icon {
-  width: 30px;
-  /* アイコンのサイズを設定 */
-  height: 30px;
-  margin-right: 10px;
+    width: 30px;
+    /* アイコンのサイズを設定 */
+    height: 30px;
+    margin-right: 10px;
 }
 
 .item-icon-lg {
-  width: 50px;
-  /* アイコンのサイズを設定 */
-  height: 50px;
-  margin-right: 10px;
-  margin-left: 10px;
+    width: 50px;
+    /* アイコンのサイズを設定 */
+    height: 50px;
+    margin-right: 10px;
+    margin-left: 10px;
 }
 
-.result>div {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.item-name {
-  color: #fff;
-}
-
+.item-name,
 .item-craftable {
-  color: #FFF;
+    color: #FFF;
 }
 
 .item-info {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* これにより要素が両端に配置されます */
-  width: 100%;
-  /* item-infoの幅を設定 */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .item-craftable {
-  color: #FFF;
-  margin-left: auto;
-  /* クラフト可能テキストを右に寄せる */
+    color: #FFF;
+    margin-left: auto;
+    /* クラフト可能テキストを右に寄せる */
 }
 
-.padding {
-  width: 5px;
-  height: calc(100vh - 20px);
-}
-
-.info {
-  width: calc(100vw - 25% - 290px);
-  height: calc(100vh - 20px);
-  margin: 10px 0px 10px 0px;
-  color: #fff;
-  border-left: solid #575757 2px;
+.craft {
+    width: 20px;
+    height: 20px;
 }
 
 .info-box {
-  display: flex;
-  flex-flow: column;
+    flex: 0 0 auto;
+    height: 100%;
+    width: calc(calc(100vw - 285px)* 0.65);
+    font-size: 14px;
+    overflow-y: auto;
+    padding: 10px;
+    border-left: solid #575757 2px;
+    border-right: solid #575757 2px;
 }
 
 .info-text {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    margin-bottom: 20px;
 }
 
-.info h3 {
-  margin-bottom: 0px;
+.info-item h3,
+.info-item h6 {
+    margin-bottom: 0px;
 }
 
-.info h6 {
-  margin-bottom: 0px;
+.copy-icon:hover {
+    color: #eee;
+    /* ホバー時の色 */
 }
 
-.contents {
-  height: calc(100vh - 180px);
-  margin: 10px 0px 0px 0px;
+.info-contents {
+    flex-grow: 1;
+    width: 100%;
+    height: fit-content;
+    color: #fff;
+}
+
+.info-main {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.info-data {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.info-memo {
+    font-size: 12px;
+    color: yellow;
+    vertical-align: bottom;
+    margin-top: 6px;
+    margin-bottom: 0;
 }
 
 .craft-box {
-  overflow-y: scroll;
-  height: 50%;
-  margin-top: 10px;
-  margin-left: 10px;
-  padding-right: 15px;
+    overflow-y: scroll;
+    height: calc(100% - 60px);
+    margin: 10px;
 }
 
 .material-button {
-  width: 30px;
-  height: 30px;
-  color: #fff;
-  background: none;
-  border: none;
+    width: 30px;
+    height: 30px;
+    color: #fff;
+    background: none;
+    border: none;
 }
 
 .button-placeholder {
-  width: 30px;
-  /* ボタンと同じサイズ */
-  height: 30px;
-  /* ボタンと同じサイズ */
-  display: inline-block;
-  /* ブロックレベル要素として表示 */
+    width: 30px;
+    /* ボタンと同じサイズ */
+    height: 30px;
+    /* ボタンと同じサイズ */
+    display: inline-block;
+    /* ブロックレベル要素として表示 */
 }
 
 .sub-material-row {
-  margin-left: 50px;
+    margin-left: 50px;
 }
 
 li {
-  margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 ul {
-  padding-left: 10px;
-  list-style: none;
+    padding-left: 10px;
+    list-style: none;
 }
 
 .material-row,
 .sub-material-row {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
 }
 
 .material-icon,
 .sub-material-row .material-icon {
-  width: 30px;
-  height: 30px;
-  margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
 }
 
 .material-name,
 .sub-material-row .material-name {
-  flex-grow: 1;
-  margin-right: 10px;
+    flex-grow: 1;
+    margin-right: 10px;
 }
 
 .material-quantity,
 .sub-material-row .material-quantity {
-  width: 50px;
-  text-align: right;
-  margin-right: 10px;
+    width: 50px;
+    text-align: right;
+    margin-right: 10px;
 }
 
 .material-price,
 .sub-material-row .material-price {
-  width: 80px;
-  text-align: right;
+    width: 80px;
+    text-align: right;
 }
 
 .sub-material-row {
-  margin-left: 70px;
-  /* サブ素材のインデント */
+    margin-left: 70px;
+    /* サブ素材のインデント */
 }
 
 .border-top {
-  border-top: solid #fff 2px;
+    border-top: solid #fff 2px;
 }
 
+
 .history {
-  width: 100%;
-  height: 50%;
-  max-height: 50%;
-  padding: 0px 10px 0px 10px;
-  display: flex;
-  gap: 10px;
+    width: 100%;
+    height: 50%;
+    max-height: 50%;
+    padding: 0px 10px 0px 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .history-section {
-  flex: 0 0 50%;
-  /* 各セクションを横幅の50%に設定 */
-  color: #fff;
-  margin-bottom: 10px;
-  background-color: #2D302D;
+    flex: 0 0 50%;
+    /* 各セクションを横幅の50%に設定 */
+    color: #fff;
+    margin-bottom: 10px;
+    background-color: #2D302D;
 }
 
 .history-table {
-  overflow-y: scroll;
-  height: 100%;
+    overflow-y: scroll;
+    height: 100%;
 }
 
 .history-table table {
-  background-color: #272a33;
-  border-collapse: collapse;
-  border-spacing: 0;
-  width: 100%;
+    background-color: #272a33;
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
 }
 
 .history-table table th,
 .history-table table td {
-  vertical-align: middle;
-  padding: 2px 5px 2px 5px;
-  border: 1px solid #434857;
-  color: #fff;
-  font-size: 14px;
-  text-align: center;
-  white-space: nowrap;
+    vertical-align: middle;
+    padding: 2px 5px 2px 5px;
+    border: 1px solid #434857;
+    color: #fff;
+    font-size: 14px;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .history-table table th {
-  background: #795548;
+    background: #795548;
 }
 
 .history-table table td {
-  background: #272a33;
+    background: #272a33;
 }
 
 ._sticky {
-  position: sticky;
-  top: 0;
-  left: 0;
-  background: none;
-  border-top: none;
-  border-bottom: none;
+    position: sticky;
+    top: 0;
+    left: 0;
+    background: none;
+    border-top: none;
+    border-bottom: none;
 }
 
 ._sticky:before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-top: 1px solid #000;
-  border-bottom: 1px solid #000;
-  background: #434857;
-  z-index: -1;
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    background: #434857;
+    z-index: -1;
 }
 
 /* ホバー時の行の背景色 */
 
 .cheaper-price {
-  color: red;
+    color: red;
 }
 
-.info-memo {
-  font-size: 12px;
-  color: yellow;
-  vertical-align: bottom;
-  margin-top: 6px;
-  margin-bottom: 0;
+/* 選択されているタブのスタイル */
+.nav-tabs .nav-link.active {
+    color: #495057;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+/* 選択されていないタブのスタイル */
+.nav-tabs .nav-link {
+    color: #495057;
+    background-color: #868788;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+}
+
+/* ホバー時のタブのスタイル */
+.nav-tabs .nav-link:hover {
+    border-color: #e9ecef #e9ecef #dee2e6;
+}
+
+.tab-content {
+    height: calc(100vh - 120px) !important;
+}
+
+.tab-menu {
+    height: 100%;
+}
+
+.tab-pane {
+    padding: 5px;
+    height: 100%;
 }</style>
-
-
