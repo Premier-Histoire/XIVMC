@@ -5,7 +5,7 @@
             <div class="button-grid full">
                 <button v-for="(item, index) in items" :key="`btn-${index}`"
                     @click="filterSearch(item.pairId, level, selectedOption)">
-                    <img :src="`https://res.cloudinary.com/dke932tm8/image/upload/v1706168566/button/${item.id}.png`" alt="Icon" class="button-icon">
+                    <img :src="`src/assets/img/${item.id}.png`" alt="Icon" class="button-icon">
                 </button>
             </div>
             <!-- レベル選択UIの追加 -->
@@ -239,8 +239,8 @@ export default {
 .dropdown-icon {
     position: absolute;
     color: #fff;
-    top: 436px;
-    left: 35px;
+    top: 438px;
+    left: 20px;
     z-index: 100;
     font-size: 12px;
     /* セレクトボックスの上に表示 */

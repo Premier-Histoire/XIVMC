@@ -49,7 +49,7 @@
                 <div v-if="infoLoading" class="info-loading-indicator">
                     <loding></loding>
                 </div>
-                <div v-if="selectedInfo&&!infoLoading" class="info-main">
+                <div v-if="selectedInfo && !infoLoading" class="info-main">
                     <div class="info-text">
                         <img :src="selectedInfo.iconUrl" alt="アイコン" class="item-icon-lg">
                         <div>
@@ -69,8 +69,9 @@
                                         aria-selected="true">素材情報</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" :class="{ active: !selectedInfo.isCraftable }" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
-                                        type="button" role="tab" aria-controls="profile" aria-selected="false">相場情報</button>
+                                    <button class="nav-link" :class="{ active: !selectedInfo.isCraftable }" id="profile-tab"
+                                        data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
+                                        aria-controls="profile" aria-selected="false">相場情報</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
@@ -78,12 +79,13 @@
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                    <div v-if="selectedInfo.isCraftable" class="d-flex px-3">
-                                        <h5>必要素材</h5>
-                                        <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
-                                    </div>
-                                    <div v-if="selectedInfo.isCraftable" class="craft-box">
+                                <div v-if="selectedInfo.isCraftable" class="tab-pane fade show active" id="home"
+                                    role="tabpanel" aria-labelledby="home-tab">
+                                    <div class="craft-box">
+                                        <div v-if="selectedInfo.isCraftable" class="d-flex px-3">
+                                            <h5>必要素材</h5>
+                                            <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
+                                        </div>
                                         <div v-for="material in selectedInfo.materials" :key="material.name">
                                             <div class="material-row">
                                                 <button class="material-button" v-if="material.hasSubMaterials"
@@ -134,7 +136,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" :class="{ 'show active': !selectedInfo.isCraftable }" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                <div class="tab-pane fade"
+                                    :class="{ 'show': !selectedInfo.isCraftable, 'active': !selectedInfo.isCraftable }"
+                                    id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                     <div class="history">
                                         <div v-if="selectedInfo.sales" class="history-section">
                                             <h5>販売履歴</h5>
@@ -222,8 +226,22 @@ export default {
             searchResults: [],
             searchQuery: '',
             servers: {
-                'Chaos - Europe': ['Cerberus', 'Louisoix', 'Moogle'],
-                'Light - Europe': ['Alpha', 'Lich', 'Odin'],
+                'Chaos - Europe': ['Cerberus', 'Louisoix', 'Moogle', 'Omega', 'Phantom', 'Ragnarok', 'Sagittarius', 'Spriggan'],
+                'Light - Europe': ['Alpha', 'Lich', 'Odin', 'Phoenix', 'Raiden', 'Shiva', 'Twintania', 'Zodiark'],
+                'Elemental - Japan': ['Aegis', 'Atomos', 'Carbuncle', 'Garuda', 'Gungnir', 'Kujata', 'Tonberry', 'Typhon'],
+                'Gaia - Japan': ['Alexander', 'Bahamut', 'Durandal', 'Fenrir', 'Ifrit', 'Ridill', 'Tiamat', 'Ultima'],
+                'Mana - Japan': ['Anima', 'Asura', 'Chocobo', 'Hades', 'Ixion', 'Masamune', 'Pandaemonium', 'Titan'],
+                'Meteor - Japan': ['Belias', 'Mandragora', 'Ramuh', 'Shinryu', 'Unicorn', 'Valefor', 'Yojimbo', 'Zeromus'],
+                'Aether - America': ['Adamantoise', 'Cactuar', 'Faerie', 'Gilgamesh', 'Jenova', 'Midgardsormr', 'Sargatanas', 'Siren'],
+                'Primal - America': ['Behemoth', 'Excalibur', 'Exodus', 'Famfrit', 'Hyperion', 'Lamia', 'Leviathan', 'Ultros'],
+                'Crystal - America': ['Balmung', 'Brynhildr', 'Coeurl', 'Diabolos', 'Goblin', 'Malboro', 'Mateus', 'Zalera'],
+                'Dynamis - America': ['Halicarnassus', 'Maduin', 'Marilith', 'Seraph'],
+                'Materia - Oceania': ['Bismarck', 'Ravana', 'Sephirot', 'Sophia', 'Zurvan'],
+                '陆行鸟 - 中国': ['宇宙和音', '幻影群岛', '神意之地', '萌芽池', '沃仙曦染', '拉诺西亚', '晨曦王座', '红玉海'],
+                '莫古力 - 中国': ['神拳痕', '潮风亭', '白金幻象', '白银乡', '旅人栈桥', '梦羽宝境', '拂晓之间', '龙巢神殿'],
+                '猫小胖 - 中国': ['延夏', '海猫茶屋', '紫水栈桥', '柔风海湾', '静语庄园', '摩杜纳', '琥珀原', ''],
+                '豆豆柴 - 中国': ['伊修加德', '黄金谷', '月牙湾', '水晶塔', '雪松原', '太阳海岸', '红茶川', '银泪湖'],
+                '한국 - 한국': ['모그리', '초코보', '카벙클', '톤베리', '펜리르']
             },
             categories: {
                 'メインアーム/サブアーム': [
@@ -317,7 +335,8 @@ export default {
         if (savedServer) {
             this.selectedServer = savedServer;
         } else {
-            this.selectedServer = 'chocobo';
+            this.selectedServer = 'Chocobo'; // 'selectedServer'がない場合、'chocobo'に設定
+            localStorage.setItem('selectedServer', 'chocobo'); // 'chocobo'をローカルストレージに保存
         }
     },
     methods: {
@@ -393,7 +412,7 @@ export default {
         getIconUrl(imageId) {
             const baseId = Math.floor(imageId / 1000) * 1000; // 1万の位を基にベースIDを算出
             const formattedImageId = imageId.toString().padStart(6, '0'); // 画像IDを6桁でフォーマット
-            return `https://res.cloudinary.com/dke932tm8/image/upload/v1706168566/icon/${formattedImageId}.png`; // 完全なURLを生成
+            return `https://xivapi.com/i/0${baseId}/${formattedImageId}.png`; // 完全なURLを生成
         },
         isCraftable(itemKey) {
             return this.recipeData.some(recipe => recipe.ItemResult === itemKey);
@@ -578,6 +597,8 @@ export default {
 }
 
 .search-box {
+    margin-right: 0.5rem;
+    margin-left: 0.5rem;
     flex: 0 0 auto;
     position: relative;
     width: 260px;
@@ -609,8 +630,8 @@ export default {
 .dropdown-icon {
     position: absolute;
     color: #fff;
-    top: 43px;
-    left: 35px;
+    top: 40px;
+    left: 20px;
     z-index: 100;
     font-size: 12px;
     /* セレクトボックスの上に表示 */
@@ -671,7 +692,7 @@ export default {
     margin-bottom: 10px;
     font-size: 10px;
     color: #FFF;
-    width: calc(100% - 1.5rem);
+    width: 100%;
     text-align: center;
 }
 
@@ -873,8 +894,7 @@ ul {
 
 .history {
     width: 100%;
-    height: 50%;
-    max-height: 50%;
+    height: 95%;
     padding: 0px 10px 0px 10px;
     display: flex;
     gap: 10px;
@@ -893,30 +913,32 @@ ul {
     height: 100%;
 }
 
-.history-table table {
-    background-color: #272a33;
+table {
     border-collapse: collapse;
     border-spacing: 0;
     width: 100%;
 }
 
-.history-table table th,
-.history-table table td {
+th,
+td {
     vertical-align: middle;
-    padding: 2px 5px 2px 5px;
-    border: 1px solid #434857;
+    padding: 5px;
+    border: 1px solid #fff;
     color: #fff;
     font-size: 14px;
     text-align: center;
     white-space: nowrap;
 }
 
-.history-table table th {
+th {
     background: #795548;
+    border-left: 1px solid #434857 !important;
+    border-right: 1px solid #434857 !important;
 }
 
-.history-table table td {
-    background: #272a33;
+td {
+    background: #17191E;
+    border: 1px solid #434857 !important;
 }
 
 ._sticky {
@@ -926,6 +948,7 @@ ul {
     background: none;
     border-top: none;
     border-bottom: none;
+    text-align: center;
 }
 
 ._sticky:before {
@@ -935,10 +958,49 @@ ul {
     left: 0;
     width: 100%;
     height: 100%;
-    border-top: 1px solid #000;
-    border-bottom: 1px solid #000;
     background: #434857;
     z-index: -1;
+}
+
+/*===========
+.scroll-box
+===========*/
+
+.scroll-box {
+    height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/*===========
+scrollbar
+===========*/
+
+
+/*スクロールバー全体の高さ*/
+
+.scroll-box::-webkit-scrollbar {
+    width: 4px;
+}
+
+/*スクロールバー全体の背景*/
+
+.scroll-box::-webkit-scrollbar-track {
+    background: #eee;
+}
+
+/*スクロールバーの動く部分*/
+
+.scroll-box::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border: none;
+}
+
+/*スクロールバーの動く部分のホバー（マウスオーバー）*/
+
+.scroll-box::-webkit-scrollbar-thumb:hover {
+    background: #999;
 }
 
 /* ホバー時の行の背景色 */
@@ -952,15 +1014,17 @@ ul {
     color: #495057;
     background-color: #fff;
     border-color: #dee2e6 #dee2e6 #fff;
+    height: 110%;
 }
 
 /* 選択されていないタブのスタイル */
 .nav-tabs .nav-link {
     color: #495057;
     background-color: #868788;
-    border: 1px solid transparent;
-    border-top-left-radius: 0.25rem;
-    border-top-right-radius: 0.25rem;
+    border: 1px solid transparent !important;
+    border-top-left-radius: 0.25rem !important;
+    border-top-right-radius: 0.25rem !important;
+    height: 110%;
 }
 
 /* ホバー時のタブのスタイル */
@@ -979,4 +1043,9 @@ ul {
 .tab-pane {
     padding: 5px;
     height: 100%;
-}</style>
+}
+
+.container-fluid {
+    --bs-gutter-x: 0 !important;
+}
+</style>
