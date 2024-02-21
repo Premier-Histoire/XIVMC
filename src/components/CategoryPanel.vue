@@ -5,7 +5,7 @@
             <div class="button-grid full">
                 <button v-for="(item, index) in items" :key="`btn-${index}`"
                     @click="filterSearch(item.pairId, level, selectedOption)">
-                    <img :src="`src/assets/img/${item.id}.png`" alt="Icon" class="button-icon">
+                    <img :src="`https://xivapi.com/i/060000/${item.id}.png`" alt="Icon" class="button-icon">
                 </button>
             </div>
             <!-- レベル選択UIの追加 -->
