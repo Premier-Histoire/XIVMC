@@ -100,10 +100,10 @@
                                                 <span
                                                     v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
                                                     class="material-price cheaper-price">
-                                                    {{ material.subMaterialsTotalCost }} 
+                                                    {{ material.subMaterialsTotalCost.toLocaleString() }} 
                                                 </span>
                                                 <span v-else class="material-price">
-                                                    {{ material.price }} 
+                                                    {{ material.price.toLocaleString() }} 
                                                 </span>
                                             </div>
                                             <div v-if="material.expanded" class="sub-materials">
@@ -113,19 +113,19 @@
                                                         class="material-icon">
                                                     <span class="material-name">{{ subMaterial.name }}</span>
                                                     <span class="material-quantity">{{ subMaterial.quantity }}個</span>
-                                                    <span class="material-price">{{ subMaterial.price }} </span>
+                                                    <span class="material-price">{{ subMaterial.price.toLocaleString() }} </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="material-row price-info border-top">
                                             <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
                                             <span class="material-name">総合計価格</span>
-                                            <span class="material-price">{{ selectedInfo.totalCost }} </span>
+                                            <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }} </span>
                                         </div>
                                         <div class="material-row price-info">
                                             <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
                                             <span class="material-name">マーケット価格</span>
-                                            <span class="material-price">{{ selectedInfo.finalProductPrice }} </span>
+                                            <span class="material-price">{{ selectedInfo.finalProductPrice.toLocaleString() }} </span>
                                         </div>
                                         <div class="material-row price-info">
                                             <div class="button-placeholder"></div>
@@ -159,7 +159,7 @@
                                                             <td>{{ index + 1 }}</td>
                                                             <td v-if="sale.hq"></td>
                                                             <td v-else></td>
-                                                            <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
+                                                            <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
                                                             <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}
                                                             </td>
                                                             <td>{{ sale.buyerName }}</td>
@@ -186,7 +186,7 @@
                                                             <td>{{ index + 1 }}</td>
                                                             <td v-if="listing.hq"></td>
                                                             <td v-else></td>
-                                                            <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
+                                                            <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
                                                             <td>{{ new Date(listing.lastReviewTime *
                                                                 1000).toLocaleDateString() }}</td>
                                                         </tr>
