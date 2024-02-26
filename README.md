@@ -1,1 +1,1 @@
-# FinalFantasyMarketCalculator(FFMC)
+# XIVMarketCalculator(XIVMC)
