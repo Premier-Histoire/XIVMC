@@ -1,1 +1,1 @@
-# FinalFantasyMarketCalculator
+# FinalFantasyMarketCalculator(FFMC)
