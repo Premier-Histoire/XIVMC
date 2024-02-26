@@ -495,7 +495,6 @@ export default {
                     selectedItem.current = await this.currentHistory(item.ItemId);
                 }
                 this.selectedInfo = selectedItem;
-                console.log(this.selectedInfo)
             } catch (error) {
                 console.error('アイテム選択エラー:', error);
             }
