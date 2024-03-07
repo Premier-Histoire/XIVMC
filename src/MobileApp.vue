@@ -3,18 +3,25 @@
       <div
         class="block block-1"
       >
-        <h2>スマホ版開発中</h2>
+      <input class="search-input search-input-mobile" type="text" v-model="searchQuery" @keyup.enter="ItemSearch" />
       </div>
       <div
-        class="block block-2"
-        @click="toggleBlock(1)"
-        :class="{ expanded: expandedBlock === 1 }"
-      >
-        <h2>Block 2</h2>
+      class="block block-2"
+      @click="toggleBlock(1)"
+      :class="{ expanded: expandedBlock === 1 }"
+    >
         <div class="content" v-if="expandedBlock === 1">
-          <p>ブロック2の内容</p>
+            <div class="result-box result-box-mobile">
+            <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
+                <img :src="item.iconUrl" alt="アイコン" class="item-icon" loading="lazy">
+                <div class="item-info">
+                <div class="item-name">{{ item.Name }}</div>
+                <div v-if="item.isCraftable" class="item-craftable"><img class="craft" src="https://xivapi.com/cj/1/blacksmith.png"></div>
+                </div>
+            </div>
+            </div>
         </div>
-      </div>
+    </div>
       <div
         class="block block-3"
         @click="toggleBlock(2)"
@@ -29,11 +36,26 @@
   </template>
   
   <script>
+  import Loding from './components/Loding.vue';
   export default {
+    components: {
+        Loding,
+    },
     data() {
       return {
-        expandedBlock: null, // 現在展開されているブロックのインデックスを保持する変数
+        expandedBlock: null,
+        searchResults: [],
       };
+    },
+    created() {
+        this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
+        const savedServer = localStorage.getItem('selectedServer');
+        if (savedServer) {
+            this.selectedServer = savedServer;
+        } else {
+            this.selectedServer = 'Chocobo'; // 'selectedServer'がない場合、'chocobo'に設定
+            localStorage.setItem('selectedServer', 'chocobo'); // 'chocobo'をローカルストレージに保存
+        }
     },
     methods: {
       toggleBlock(index) {
@@ -43,6 +65,221 @@
           this.expandedBlock = index;
         }
       },
+      async loadJsonData() {
+            try {
+                this.isLoading = true;
+                const itemsResponse = await fetch('/json/Item.json');
+                const recipeResponse = await fetch('/json/Recipe.json');
+                const classJobCategoriesResponse = await fetch('/json/ClassJobCategory.json');
+                if (!itemsResponse.ok || !recipeResponse.ok || !classJobCategoriesResponse.ok) {
+                    throw new Error('JSONファイルの読み込みに失敗しました。');
+                }
+                this.itemsData = await itemsResponse.json();
+                this.recipeData = await recipeResponse.json();
+                this.classJobCategories = await classJobCategoriesResponse.json();
+            } catch (error) {
+                console.error('JSON読み込みエラー:', error);
+            } finally {
+                this.isLoading = false;
+            }
+        },
+        ItemSearch() {
+        try {
+            // 検索処理を行い、結果をsearchResultsに格納する
+            this.searchResults = this.itemsData.filter(item =>
+            item.Name.includes(this.searchQuery)
+            ).map(item => ({
+            ...item,
+            iconUrl: this.getIconUrl(item.Icon),
+            isCraftable: this.isCraftable(item.ItemId),
+            }));
+
+            // 検索結果があればブロック2を展開する
+            if (this.searchResults.length > 0) {
+            this.expandedBlock = 1;
+            } else {
+            // 検索結果がない場合はブロック2を閉じる
+            this.expandedBlock = null;
+            }
+        } catch (error) {
+            console.error('検索エラー:', error);
+        }
+        },
+        FilterSearch(filterData) {
+            try {
+                const selectedJobId = this.findClassJobId(filterData.selectedJob);
+
+                this.searchResults = this.itemsData.filter(item => {
+                    // メインアーム/サブアームまたは防具/アクセサリの場合
+                    if (filterData.category === 'メインアーム/サブアーム' || filterData.category === '防具/アクセサリ') {
+                        return item.ItemSearchCategory === filterData.pairId &&
+                            (
+                                (filterData.category === 'メインアーム/サブアーム' && item.LevelEquip >= filterData.level) ||
+                                (
+                                    filterData.category === '防具/アクセサリ' && item.LevelEquip >= filterData.level &&
+                                    selectedJobId.includes(String(item.ClassJobCategory))
+                                )
+                            );
+                    }
+                    // それ以外のカテゴリの場合
+                    else {
+                        return item.ItemSearchCategory === filterData.pairId;
+                    }
+                }).map(item => ({
+                    ...item,
+                    iconUrl: this.getIconUrl(item.Icon),
+                    isCraftable: this.isCraftable(item.ItemId)
+                }));
+            } catch (error) {
+                console.error('検索エラー:', error);
+            }
+        },
+        findClassJobId(selectedJob) {
+            const matchingIds = [];
+            for (const category of this.classJobCategories) {
+                if (category[selectedJob] === "TRUE") {
+                    matchingIds.push(category.ID);
+                }
+            }
+            return matchingIds;
+        },
+        getIconUrl(imageId) {
+            const baseId = Math.floor(imageId / 1000) * 1000; // 1万の位を基にベースIDを算出
+            const formattedImageId = imageId.toString().padStart(6, '0'); // 画像IDを6桁でフォーマット
+            return `https://xivapi.com/i/0${baseId}/${formattedImageId}.png`; // 完全なURLを生成
+        },
+        isCraftable(itemKey) {
+            return this.recipeData.some(recipe => recipe.ItemResult === itemKey);
+        },
+        onServerSelect() {
+            this.selectedServer = this.$refs.servers.value;
+            // 選択されたサーバーをローカルストレージに保存
+            localStorage.setItem('selectedServer', this.selectedServer);
+        },
+        async getLowestPrice(itemId) {
+            // Universalis APIを使用してアイテムの価格を取得
+            const response = await fetch(`https://universalis.app/api/${this.selectedServer}/${itemId}`);
+            const data = await response.json();
+            if (data.minPriceHQ === 0) {
+                return data.minPrice;
+            } else {
+                return data.minPriceHQ;
+            }
+        },
+        async salesHistory(itemId) {
+            try {
+                const response = await fetch(`https://universalis.app/api/v2/history/${this.selectedServer}/${itemId}`);
+                if (!response.ok) {
+                    throw new Error('サーバーからの応答がありません');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('salesHistory取得エラー:', error);
+                return null;
+            }
+        },
+
+        async currentHistory(itemId) {
+            try {
+                const response = await fetch(`https://universalis.app/api/v2/${this.selectedServer}/${itemId}`);
+                if (!response.ok) {
+                    throw new Error('サーバーからの応答がありません');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('currentHistory取得エラー:', error);
+                return null;
+            }
+        },
+        async selectItem(item) {
+            try {
+                this.infoLoading = true;
+                const selectedItem = { ...item, materials: [] }; // 空の配列で materials を初期化
+                if (item.isCraftable) {
+                    const recipe = this.recipeData.find(recipe => recipe.ItemResult === item.ItemId);
+                    if (recipe) {
+                        let totalCost = 0;
+                        const materialsPromises = [];
+
+                        for (let i = 0; i <= 9; i++) {
+                            const ingredientItemId = recipe[`ItemIngredient[${i}]`];
+                            const quantity = recipe[`AmountIngredient[${i}]`];
+                            if (ingredientItemId && quantity > 0) {
+                                materialsPromises.push(this.getMaterialDetails(ingredientItemId, quantity));
+                            }
+                        }
+
+                        const materials = await Promise.all(materialsPromises);
+                        materials.forEach(material => {
+                            if (material) {
+                                selectedItem.materials.push(material); // ここで push する
+                                totalCost += material.price * material.quantity;
+                            }
+                        });
+
+                        selectedItem.totalCost = totalCost;
+                        selectedItem.finalProductPrice = await this.getLowestPrice(item.ItemId);
+                        selectedItem.sales = await this.salesHistory(item.ItemId);
+                        selectedItem.current = await this.currentHistory(item.ItemId);
+                    }
+                } else {
+                    selectedItem.sales = await this.salesHistory(item.ItemId);
+                    selectedItem.current = await this.currentHistory(item.ItemId);
+                }
+                this.selectedInfo = selectedItem;
+            } catch (error) {
+                console.error('アイテム選択エラー:', error);
+            }
+            finally {
+                this.infoLoading = false; // ローディング終了
+            }
+        },
+        async getMaterialDetails(ingredientItemId, quantity) {
+            const price = await this.getLowestPrice(ingredientItemId);
+            const materialItem = this.itemsData.find(i => i.ItemId === ingredientItemId);
+            const subMaterials = await this.getSubMaterials(ingredientItemId);
+            const subMaterialsTotalCost = subMaterials.reduce(
+                (total, subMaterial) => total + (subMaterial.price * subMaterial.quantity),
+                0
+            );
+
+            return {
+                name: materialItem ? materialItem.Name : '不明な素材',
+                quantity: quantity,
+                iconUrl: materialItem ? this.getIconUrl(materialItem.Icon) : null,
+                price: price,
+                isCheaper: subMaterialsTotalCost < price,
+                subMaterialsTotalCost: subMaterialsTotalCost,
+                expanded: false,
+                hasSubMaterials: subMaterials.length > 0, // subMaterialsが存在する場合はtrue, そうでなければfalse
+                subMaterials: subMaterials
+            };
+        },
+        async getSubMaterials(itemId) {
+            const recipe = this.recipeData.find(recipe => recipe.ItemResult === itemId);
+            if (!recipe) return [];
+
+            const subMaterialsPromises = [];
+            for (let i = 0; i <= 9; i++) {
+                const ingredientItemId = recipe[`ItemIngredient[${i}]`];
+                const quantity = recipe[`AmountIngredient[${i}]`];
+                if (ingredientItemId && quantity > 0) {
+                    subMaterialsPromises.push(this.getMaterialDetails(ingredientItemId, quantity));
+                }
+            }
+
+            return await Promise.all(subMaterialsPromises);
+        },
+        copyText() {
+            // selectedInfo.Nameのテキストをコピー
+            navigator.clipboard.writeText(this.selectedInfo.Name).then(() => {
+            })
+                .catch(err => {
+                    console.error('コピーに失敗しました:', err);
+                });
+        }
     },
   };
   </script>
@@ -55,8 +292,9 @@
   }
   
   .block {
-    border: 1px solid #ccc;
-    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0px 10px 0px;
+    height: 50px;
     cursor: pointer;
     transition: flex-grow 0.3s; /* アニメーションを追加 */
   }
@@ -72,7 +310,7 @@
   
   .block.expanded {
     flex-grow: 1;
-    max-height: calc(100vh - (3 * 50px)); /* 残りサイズの最大に展開 */
+    max-height: calc(100vh - 130px); /* 画面サイズを基準として収まるように修正 */
     overflow-y: auto; /* コンテンツがはみ出た場合はスクロールバーを表示 */
   }
   
@@ -82,6 +320,17 @@
   
   .block.expanded .content {
     display: block;
+  }
+
+  .search-input-mobile{
+    height: 100% !important;
+    padding-left: 10px;
+  }
+
+  .result-box-mobile {
+    width: 100% !important;
+    padding: 0px;
+    border: none;
   }
   </style>
   
