@@ -1,6 +1,6 @@
 <template>
     <div class="title">
-        <h1>XIVMC</h1>
+        <h1></h1>
     </div>
     <div class="container">
       <div
@@ -12,7 +12,7 @@
       class="block block-2"
       :class="{ expanded: expandedBlock === 1 }"
     >
-    <h2 @click="toggleBlock(1)">リスト</h2>
+    <h2 @click="toggleBlock(1)"></h2>
         <div class="content" v-if="expandedBlock === 1">
             <div class="result-box result-box-mobile">
             <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
@@ -29,64 +29,17 @@
         class="block block-3"
         :class="{ expanded: expandedBlock === 2 }"
       >
-        <h2 @click="toggleBlock(2)">結果</h2>
+      <h2 @click="toggleBlock(2)"></h2>
         <div class="content" v-if="expandedBlock === 2">
-            <div class="craft-box">
-                <div v-if="selectedInfo.isCraftable" class="d-flex px-3">
-                    <h5>必要素材</h5>
-                    <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
-                </div>
-                <div v-for="material in selectedInfo.materials" :key="material.name">
-                    <div class="material-row">
-                        <button class="material-button" v-if="material.hasSubMaterials"
-                            @click="material.expanded = !material.expanded">
-                            {{ material.expanded ? '▼' : '▶' }}
-                        </button>
-                        <div v-else class="button-placeholder"></div>
-                        <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン"
-                            class="material-icon">
-                        <span class="material-name">{{ material.name }}</span>
-                        <span class="material-quantity">{{ material.quantity }}個</span>
-                        <span
-                            v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
-                            class="material-price cheaper-price">
-                            {{ material.subMaterialsTotalCost.toLocaleString() }} 
-                        </span>
-                        <span v-else class="material-price">
-                            {{ material.price.toLocaleString() }} 
-                        </span>
-                    </div>
-                    <div v-if="material.expanded" class="sub-materials">
-                        <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name"
-                            class="sub-material-row">
-                            <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン"
-                                class="material-icon">
-                            <span class="material-name">{{ subMaterial.name }}</span>
-                            <span class="material-quantity">{{ subMaterial.quantity }}個</span>
-                            <span class="material-price">{{ subMaterial.price.toLocaleString() }} </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="material-row price-info border-top">
-                    <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-                    <span class="material-name">総合計価格</span>
-                    <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }} </span>
-                </div>
-                <div class="material-row price-info">
-                    <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-                    <span class="material-name">マーケット価格</span>
-                    <span class="material-price">{{ selectedInfo.finalProductPrice.toLocaleString() }} </span>
-                </div>
-                <div class="material-row price-info">
-                    <div class="button-placeholder"></div>
-                    <span class="material-name">利益率</span>
-                    <span class="material-price">{{ ((selectedInfo.finalProductPrice -
-                        selectedInfo.totalCost) /
-                        selectedInfo.totalCost * 100).toFixed(2) }}%</span>
-                </div>
+            <div v-if="infoLoading" class="info-loading-indicator">
+                <loding></loding>
             </div>
         </div>
       </div>
+    </div>
+    <div class="copyright">
+        <p>FINAL FANTASY XIV</p>
+        <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
     </div>
   </template>
   
@@ -123,6 +76,7 @@
         } else if (index !== 0) { // ブロック1以外のクリックのみ展開
           this.expandedBlock = index;
         }
+        console.log(this.expandedBlock)
       },
       async loadJsonData() {
             try {
@@ -320,14 +274,15 @@
   .block {
     border-bottom: 1px solid #ccc;
     padding: 0px 0px 5px 0px;
-    height: 50px;
+    height: 40px;
     cursor: pointer;
     transition: flex-grow 0.3s; /* アニメーションを追加 */
   }
   
   .block h2 {
-    margin-top: 0;
-    margin-bottom: 0;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
     color: white;
   }
   
@@ -338,7 +293,7 @@
   .block.expanded {
     border-bottom: 1px solid #ccc;
     flex-grow: 1;
-    max-height: calc(100vh - 90px); /* 画面サイズを基準として収まるように修正 */
+    max-height: calc(100vh - 170px); /* 画面サイズを基準として収まるように修正 */
     overflow-y: auto; /* コンテンツがはみ出た場合はスクロールバーを表示 */
   }
   
