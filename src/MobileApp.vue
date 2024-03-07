@@ -457,7 +457,7 @@ body {
 .craft-box-mobile {
     color: white;
     font-size: 0.5rem;
-    height: 100%;
+    height: calc(100% - 50px);
     margin: 0;
 }
 
