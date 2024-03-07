@@ -154,8 +154,7 @@ export default {
     },
     data() {
         return {
-            isLoading: true,
-            infoLoading: false,
+            isLoading: false,
             expandedBlock: null,
             searchResults: [],
             searchQuery: '',
