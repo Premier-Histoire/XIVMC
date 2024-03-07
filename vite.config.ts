@@ -2,7 +2,10 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { inject } from '@vercel/analytics';
 
-inject(); // Vercel Web Analytics のスクリプトをページに追加
+// Vercel Web Analytics をページに追加する関数を定義
+function addWebAnalytics() {
+  inject();
+}
 
 // Vite の設定を定義
 export default defineConfig({
@@ -12,3 +15,6 @@ export default defineConfig({
   },
   plugins: [vue()],
 });
+
+// Web Analytics をページに追加する関数をエクスポート
+export { addWebAnalytics };
