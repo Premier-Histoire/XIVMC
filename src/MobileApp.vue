@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="block block-3" :class="{ expanded: expandedBlock === 2 }">
-            <p @click="toggleBlock(2)"></p>
+            <p></p>
             <div class="content" v-if="expandedBlock === 2">
                 <div class="craft-box craft-box-mobile">
                     <div v-if="isLoading || (selectedInfo === null)" class="info-loading-indicator">
