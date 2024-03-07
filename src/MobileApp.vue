@@ -25,111 +25,115 @@
         <div class="block block-3" :class="{ expanded: expandedBlock === 2 }">
             <p @click="toggleBlock(2)"></p>
             <div class="content" v-if="expandedBlock === 2">
-                <div v-if="infoLoading" class="info-loading-indicator">
-                    <loding></loding>
-                </div>
                 <div class="craft-box craft-box-mobile">
-                    <div v-if="selectedInfo.isCraftable" class="d-flex flex-column px-3">
+                    <div v-if="isLoading || (selectedInfo === null)" class="info-loading-indicator">
+                        <loding></loding>
+                    </div>
+                    <div v-if="selectedInfo && selectedInfo.isCraftable" class="d-flex flex-column px-3 px-3-mobile">
                         <p class="info-memo">必要素材</p>
                         <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
-                    </div>
-                    <div v-for="material in selectedInfo.materials" :key="material.name" class="material-mobile">
-                        <div class="material-row material-row-mobile">
-                            <button class="material-button" v-if="material.hasSubMaterials"
-                                @click="material.expanded = !material.expanded">
-                                {{ material.expanded ? '▼' : '▶' }}
-                            </button>
-                            <div v-else class="button-placeholder"></div>
-                            <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン"
-                                class="material-icon material-icon-mobile">
-                            <span class="material-name">{{ material.name }}</span>
-                            <span class="material-quantity">{{ material.quantity }}個</span>
-                            <span v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
-                                class="material-price cheaper-price">
-                                {{ material.subMaterialsTotalCost.toLocaleString() }} 
-                            </span>
-                            <span v-else class="material-price">
-                                {{ material.price.toLocaleString() }} 
-                            </span>
-                        </div>
-                        <div v-if="material.expanded" class="sub-materials">
-                            <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name"
-                                class="sub-material-row">
-                                <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン"
+                        <div v-for="material in selectedInfo.materials" :key="material.name" class="material-mobile">
+                            <div class="material-row material-row-mobile">
+                                <button class="material-button" v-if="material.hasSubMaterials"
+                                    @click="material.expanded = !material.expanded">
+                                    {{ material.expanded ? '▼' : '▶' }}
+                                </button>
+                                <div v-else class="button-placeholder"></div>
+                                <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン"
                                     class="material-icon material-icon-mobile">
-                                <span class="material-name">{{ subMaterial.name }}</span>
-                                <span class="material-quantity">{{ subMaterial.quantity }}個</span>
-                                <span class="material-price">{{ subMaterial.price.toLocaleString() }} </span>
+                                <span class="material-name">{{ material.name }}</span>
+                                <span class="material-quantity">{{ material.quantity }}個</span>
+                                <span
+                                    v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
+                                    class="material-price cheaper-price">
+                                    {{ material.subMaterialsTotalCost.toLocaleString() }} 
+                                </span>
+                                <span v-else class="material-price">
+                                    {{ material.price.toLocaleString() }} 
+                                </span>
+                            </div>
+                            <div v-if="material.expanded" class="sub-materials">
+                                <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name"
+                                    class="sub-material-row">
+                                    <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン"
+                                        class="material-icon material-icon-mobile">
+                                    <span class="material-name">{{ subMaterial.name }}</span>
+                                    <span class="material-quantity">{{ subMaterial.quantity }}個</span>
+                                    <span class="material-price">{{ subMaterial.price.toLocaleString() }} </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="material-row material-row-mobile price-info border-top">
-                        <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-                        <span class="material-name">総合計価格</span>
-                        <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }} </span>
-                    </div>
-                    <div class="material-row material-row-mobile price-info">
-                        <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
-                        <span class="material-name">マーケット価格</span>
-                        <span class="material-price">{{ selectedInfo.finalProductPrice.toLocaleString() }} </span>
-                    </div>
-                    <div class="material-row material-row-mobile price-info">
-                        <div class="button-placeholder"></div>
-                        <span class="material-name">利益率</span>
-                        <span class="material-price">{{ ((selectedInfo.finalProductPrice -
-                            selectedInfo.totalCost) /
-                            selectedInfo.totalCost * 100).toFixed(2) }}%</span>
-                    </div>
-                    <div v-if="selectedInfo.sales" class="history-section">
-                        <h5>販売履歴</h5>
-                        <div class="history-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th class="_sticky">#</th>
-                                        <th class="_sticky">HQ</th>
-                                        <th class="_sticky">単価</th>
-                                        <th class="_sticky">販売日</th>
-                                        <th class="_sticky">購入者</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(sale, index) in selectedInfo.sales.entries" :key="sale.timestamp">
-                                        <td>{{ index + 1 }}</td>
-                                        <td v-if="sale.hq"></td>
-                                        <td v-else></td>
-                                        <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
-                                        <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}
-                                        </td>
-                                        <td>{{ sale.buyerName }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="material-row material-row-mobile price-info border-top">
+                            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+                            <span class="material-name">総合計価格</span>
+                            <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }} </span>
+                        </div>
+                        <div class="material-row material-row-mobile price-info">
+                            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+                            <span class="material-name">マーケット価格</span>
+                            <span class="material-price">{{ selectedInfo.finalProductPrice.toLocaleString() }} </span>
+                        </div>
+                        <div class="material-row material-row-mobile price-info">
+                            <div class="button-placeholder"></div>
+                            <span class="material-name">利益率</span>
+                            <span class="material-price">{{ ((selectedInfo.finalProductPrice -
+                selectedInfo.totalCost) /
+                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
                         </div>
                     </div>
-                    <div v-if="selectedInfo.current" class="history-section">
-                        <h5>現在の市場価格</h5>
-                        <div class="history-table">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th class="_sticky">#</th>
-                                        <th class="_sticky">HQ</th>
-                                        <th class="_sticky">単価</th>
-                                        <th class="_sticky">最終確認日</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr v-for="(listing, index) in selectedInfo.current.listings" :key="listing.listingID">
-                                        <td>{{ index + 1 }}</td>
-                                        <td v-if="listing.hq"></td>
-                                        <td v-else></td>
-                                        <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
-                                        <td>{{ new Date(listing.lastReviewTime *
-                                            1000).toLocaleDateString() }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <div class="px-4-mobile">
+                        <div v-if="selectedInfo && selectedInfo.sales" class="history-section">
+                            <h5>販売履歴</h5>
+                            <div class="history-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="_sticky">#</th>
+                                            <th class="_sticky">HQ</th>
+                                            <th class="_sticky">単価</th>
+                                            <th class="_sticky">販売日</th>
+                                            <th class="_sticky">購入者</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(sale, index) in selectedInfo.sales.entries" :key="sale.timestamp">
+                                            <td>{{ index + 1 }}</td>
+                                            <td v-if="sale.hq"></td>
+                                            <td v-else></td>
+                                            <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
+                                            <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}
+                                            </td>
+                                            <td>{{ sale.buyerName }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div v-if="selectedInfo && selectedInfo.current" class="history-section">
+                            <h5>現在の市場価格</h5>
+                            <div class="history-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="_sticky">#</th>
+                                            <th class="_sticky">HQ</th>
+                                            <th class="_sticky">単価</th>
+                                            <th class="_sticky">最終確認日</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(listing, index) in selectedInfo.current.listings"
+                                            :key="listing.listingID">
+                                            <td>{{ index + 1 }}</td>
+                                            <td v-if="listing.hq"></td>
+                                            <td v-else></td>
+                                            <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
+                                            <td>{{ new Date(listing.lastReviewTime *
+                1000).toLocaleDateString() }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,7 +145,7 @@
         <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
     </div>
 </template>
-  
+
 <script>
 import Loding from './components/Loding.vue';
 export default {
@@ -270,7 +274,8 @@ export default {
         async selectItem(item) {
             this.expandedBlock = 2;
             try {
-                this.infoLoading = true;
+                this.isLoading = true;
+                this.selectedInfo = undefined;
                 const selectedItem = { ...item, materials: [] }; // 空の配列で materials を初期化
                 if (item.isCraftable) {
                     const recipe = this.recipeData.find(recipe => recipe.ItemResult === item.ItemId);
@@ -309,7 +314,7 @@ export default {
                 console.error('アイテム選択エラー:', error);
             }
             finally {
-                this.infoLoading = false; // ローディング終了
+                this.isLoading = false; // ローディング終了
             }
         },
         async getMaterialDetails(ingredientItemId, quantity) {
@@ -359,7 +364,7 @@ export default {
     },
 };
 </script>
-  
+
 <style scoped>
 body {
     color: white;
@@ -475,5 +480,13 @@ body {
     width: 25px;
     height: 25px;
 }
+
+.px-3-mobile {
+    padding-right: 0.5rem !important;
+    padding-left: 0.5rem !important;
+}
+
+.px-4-mobile {
+    padding-left: 0.5rem !important;
+}
 </style>
-  
