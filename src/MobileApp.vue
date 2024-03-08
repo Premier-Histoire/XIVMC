@@ -4,15 +4,15 @@
     </div>
     <div class="container">
         <div class="block block-1">
-            <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery"
-                @keyup.enter="ItemSearch" />
-            <select id="servers" class="select-box select-box-mobile" @focus="isSelectBoxOpen = true" @blur="isSelectBoxOpen = false"
-                ref="servers" @change="onServerSelect" v-model="selectedServer">
+            <select id="servers" class="select-box select-box-mobile" @focus="isSelectBoxOpen = true"
+                @blur="isSelectBoxOpen = false" ref="servers" @change="onServerSelect" v-model="selectedServer">
                 <option disabled="" value="">- Please Choose a Server -</option>
                 <optgroup v-for="(group, label) in servers" :label="label">
                     <option v-for="server in group" :value="server">{{ server }}</option>
                 </optgroup>
             </select>
+            <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery"
+                @keyup.enter="ItemSearch" />
         </div>
         <div class="block block-2" :class="{ expanded: expandedBlock === 1 }">
             <p @click="toggleBlock(1)"></p>
@@ -84,8 +84,8 @@
                             <div class="button-placeholder"></div>
                             <span class="material-name">利益率</span>
                             <span class="material-price">{{ ((selectedInfo.finalProductPrice -
-                selectedInfo.totalCost) /
-                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+                    selectedInfo.totalCost) /
+                    selectedInfo.totalCost * 100).toFixed(2) }}%</span>
                         </div>
                     </div>
                     <div class="px-4-mobile">
@@ -136,7 +136,7 @@
                                             <td v-else></td>
                                             <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
                                             <td>{{ new Date(listing.lastReviewTime *
-                1000).toLocaleDateString() }}</td>
+                    1000).toLocaleDateString() }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
