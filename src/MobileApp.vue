@@ -3,61 +3,163 @@
         <h1></h1>
     </div>
     <div class="container">
-      <div
-        class="block block-1"
-      >
-      <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery" @keyup.enter="ItemSearch" />
-      </div>
-      <div
-      class="block block-2"
-      :class="{ expanded: expandedBlock === 1 }"
-    >
-    <h2 @click="toggleBlock(1)"></h2>
-        <div class="content" v-if="expandedBlock === 1">
-            <div class="result-box result-box-mobile">
-            <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
-                <img :src="item.iconUrl" alt="アイコン" class="item-icon" loading="lazy">
-                <div class="item-info">
-                <div class="item-name item-name-mobile">{{ item.Name }}</div>
-                <div v-if="item.isCraftable" class="item-craftable"><img class="craft" src="https://xivapi.com/cj/1/blacksmith.png"></div>
+        <div class="block block-1">
+            <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery"
+                @keyup.enter="ItemSearch" />
+        </div>
+        <div class="block block-2" :class="{ expanded: expandedBlock === 1 }">
+            <p @click="toggleBlock(1)"></p>
+            <div class="content" v-if="expandedBlock === 1">
+                <div class="result-box result-box-mobile">
+                    <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
+                        <img :src="item.iconUrl" alt="アイコン" class="item-icon" loading="lazy">
+                        <div class="item-info">
+                            <div class="item-name item-name-mobile">{{ item.Name }}</div>
+                            <div v-if="item.isCraftable" class="item-craftable"><img class="craft"
+                                    src="https://xivapi.com/cj/1/blacksmith.png"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="block block-3" :class="{ expanded: expandedBlock === 2 }">
+            <p></p>
+            <div class="content" v-if="expandedBlock === 2">
+                <div class="craft-box craft-box-mobile">
+                    <div v-if="isLoading || (selectedInfo === null)" class="info-loading-indicator">
+                        <loding></loding>
+                    </div>
+                    <div v-if="selectedInfo && selectedInfo.isCraftable" class="d-flex flex-column px-3 px-3-mobile">
+                        <p class="info-memo">必要素材</p>
+                        <p class="info-memo">(素材を作成したほうが安い場合赤文字で表示されます。)</p>
+                        <div v-for="material in selectedInfo.materials" :key="material.name" class="material-mobile">
+                            <div class="material-row material-row-mobile">
+                                <button class="material-button" v-if="material.hasSubMaterials"
+                                    @click="material.expanded = !material.expanded">
+                                    {{ material.expanded ? '▼' : '▶' }}
+                                </button>
+                                <div v-else class="button-placeholder"></div>
+                                <img v-if="material.iconUrl" :src="material.iconUrl" alt="アイコン"
+                                    class="material-icon material-icon-mobile">
+                                <span class="material-name">{{ material.name }}</span>
+                                <span class="material-quantity">{{ material.quantity }}個</span>
+                                <span
+                                    v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
+                                    class="material-price cheaper-price">
+                                    {{ material.subMaterialsTotalCost.toLocaleString() }} 
+                                </span>
+                                <span v-else class="material-price">
+                                    {{ material.price.toLocaleString() }} 
+                                </span>
+                            </div>
+                            <div v-if="material.expanded" class="sub-materials">
+                                <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name"
+                                    class="sub-material-row">
+                                    <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン"
+                                        class="material-icon material-icon-mobile">
+                                    <span class="material-name">{{ subMaterial.name }}</span>
+                                    <span class="material-quantity">{{ subMaterial.quantity }}個</span>
+                                    <span class="material-price">{{ subMaterial.price.toLocaleString() }} </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="material-row material-row-mobile price-info border-top">
+                            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+                            <span class="material-name">総合計価格</span>
+                            <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }} </span>
+                        </div>
+                        <div class="material-row material-row-mobile price-info">
+                            <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
+                            <span class="material-name">マーケット価格</span>
+                            <span class="material-price">{{ selectedInfo.finalProductPrice.toLocaleString() }} </span>
+                        </div>
+                        <div class="material-row material-row-mobile price-info">
+                            <div class="button-placeholder"></div>
+                            <span class="material-name">利益率</span>
+                            <span class="material-price">{{ ((selectedInfo.finalProductPrice -
+                selectedInfo.totalCost) /
+                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+                        </div>
+                    </div>
+                    <div class="px-4-mobile">
+                        <div v-if="selectedInfo && selectedInfo.sales" class="history-section">
+                            <h5>販売履歴</h5>
+                            <div class="history-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="_sticky">#</th>
+                                            <th class="_sticky">HQ</th>
+                                            <th class="_sticky">単価</th>
+                                            <th class="_sticky">販売日</th>
+                                            <th class="_sticky">購入者</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(sale, index) in selectedInfo.sales.entries" :key="sale.timestamp">
+                                            <td>{{ index + 1 }}</td>
+                                            <td v-if="sale.hq"></td>
+                                            <td v-else></td>
+                                            <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
+                                            <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}
+                                            </td>
+                                            <td>{{ sale.buyerName }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div v-if="selectedInfo && selectedInfo.current" class="history-section">
+                            <h5>現在の市場価格</h5>
+                            <div class="history-table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th class="_sticky">#</th>
+                                            <th class="_sticky">HQ</th>
+                                            <th class="_sticky">単価</th>
+                                            <th class="_sticky">最終確認日</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="(listing, index) in selectedInfo.current.listings"
+                                            :key="listing.listingID">
+                                            <td>{{ index + 1 }}</td>
+                                            <td v-if="listing.hq"></td>
+                                            <td v-else></td>
+                                            <td>{{ listing.pricePerUnit.toLocaleString() }} </td>
+                                            <td>{{ new Date(listing.lastReviewTime *
+                1000).toLocaleDateString() }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-      <div
-        class="block block-3"
-        :class="{ expanded: expandedBlock === 2 }"
-      >
-      <h2 @click="toggleBlock(2)"></h2>
-        <div class="content" v-if="expandedBlock === 2">
-            <div v-if="infoLoading" class="info-loading-indicator">
-                <loding></loding>
-            </div>
-        </div>
-      </div>
     </div>
     <div class="copyright">
         <p>FINAL FANTASY XIV</p>
         <p> (C) SQUARE ENIX CO., LTD. All Rights Reserved.</p>
     </div>
-  </template>
-  
-  <script>
-  import Loding from './components/Loding.vue';
-  export default {
+</template>
+
+<script>
+import Loding from './components/Loding.vue';
+export default {
     components: {
         Loding,
     },
     data() {
-      return {
-        isLoading: true,
-        infoLoading: false,
-        expandedBlock: null,
-        searchResults: [],
-        searchQuery: '',
-        selectedInfo: null,
-      };
+        return {
+            isLoading: false,
+            expandedBlock: null,
+            searchResults: [],
+            searchQuery: '',
+            selectedInfo: null,
+        };
     },
     created() {
         this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
@@ -70,15 +172,15 @@
         }
     },
     methods: {
-      toggleBlock(index) {
-        if (this.expandedBlock === index) {
-          this.expandedBlock = null;
-        } else if (index !== 0) { // ブロック1以外のクリックのみ展開
-          this.expandedBlock = index;
-        }
-        console.log(this.expandedBlock)
-      },
-      async loadJsonData() {
+        toggleBlock(index) {
+            if (this.expandedBlock === index) {
+                this.expandedBlock = null;
+            } else if (index !== 0) { // ブロック1以外のクリックのみ展開
+                this.expandedBlock = index;
+            }
+            console.log(this.expandedBlock)
+        },
+        async loadJsonData() {
             try {
                 this.isLoading = true;
                 const itemsResponse = await fetch('/json/Item.json');
@@ -97,23 +199,23 @@
             }
         },
         ItemSearch() {
-        try {
-            // 検索処理を行い、結果をsearchResultsに格納する
-            this.searchResults = this.itemsData.filter(item =>
-            item.Name.includes(this.searchQuery)
-            ).map(item => ({
-            ...item,
-            iconUrl: this.getIconUrl(item.Icon),
-            isCraftable: this.isCraftable(item.ItemId),
-            }));
+            try {
+                // 検索処理を行い、結果をsearchResultsに格納する
+                this.searchResults = this.itemsData.filter(item =>
+                    item.Name.includes(this.searchQuery)
+                ).map(item => ({
+                    ...item,
+                    iconUrl: this.getIconUrl(item.Icon),
+                    isCraftable: this.isCraftable(item.ItemId),
+                }));
 
-            // 検索結果があればブロック2を展開する
-            if (this.searchResults.length > 0) {
-            this.expandedBlock = 1;
-            } else {
-            // 検索結果がない場合はブロック2を閉じる
-            this.expandedBlock = null;
-            }
+                // 検索結果があればブロック2を展開する
+                if (this.searchResults.length > 0) {
+                    this.expandedBlock = 1;
+                } else {
+                    // 検索結果がない場合はブロック2を閉じる
+                    this.expandedBlock = null;
+                }
             } catch (error) {
                 console.error('検索エラー:', error);
             }
@@ -171,7 +273,8 @@
         async selectItem(item) {
             this.expandedBlock = 2;
             try {
-                this.infoLoading = true;
+                this.isLoading = true;
+                this.selectedInfo = undefined;
                 const selectedItem = { ...item, materials: [] }; // 空の配列で materials を初期化
                 if (item.isCraftable) {
                     const recipe = this.recipeData.find(recipe => recipe.ItemResult === item.ItemId);
@@ -210,7 +313,7 @@
                 console.error('アイテム選択エラー:', error);
             }
             finally {
-                this.infoLoading = false; // ローディング終了
+                this.isLoading = false; // ローディング終了
             }
         },
         async getMaterialDetails(ingredientItemId, quantity) {
@@ -258,80 +361,131 @@
                 });
         }
     },
-  };
-  </script>
-  
-  <style scoped>
-  body {
+};
+</script>
+
+<style scoped>
+body {
     color: white;
-  }
-  .container {
+}
+
+.container {
     display: flex;
     height: calc(100vh - 40px);
-    flex-direction: column; /* 縦に並べる */
-  }
-  
-  .block {
+    flex-direction: column;
+    /* 縦に並べる */
+}
+
+.block {
     border-bottom: 1px solid #ccc;
     padding: 0px 0px 5px 0px;
     height: 40px;
     cursor: pointer;
-    transition: flex-grow 0.3s; /* アニメーションを追加 */
-  }
-  
-  .block h2 {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    height: 30px;
+    transition: flex-grow 0.3s;
+    /* アニメーションを追加 */
+    position: relative;
+}
+
+.block p {
+    margin: 0;
+    /* マージンをゼロに設定 */
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: auto;
     color: white;
-  }
-  
-  .block-1 {
-    height: 40px; /* block-1 の高さを設定 */
-  }
-  
-  .block.expanded {
+    position: sticky;
+    /* 要素を固定する */
+    top: 0;
+    /* ブロック内の上端に固定 */
+    background-color: #2D302D;
+    /* 背景色を設定（任意） */
+    z-index: 1;
+    /* 必要に応じて他の要素よりも前面に表示 */
+    box-sizing: border-box;
+    /* ボックスモデルを調整 */
+}
+
+.block-1 {
+    height: 40px;
+    /* block-1 の高さを設定 */
+}
+
+.block.expanded {
     border-bottom: 1px solid #ccc;
     flex-grow: 1;
-    max-height: calc(100vh - 170px); /* 画面サイズを基準として収まるように修正 */
-    overflow-y: auto; /* コンテンツがはみ出た場合はスクロールバーを表示 */
-  }
-  
-  .block .content {
-    display: none;
-  }
-  
-  .block.expanded .content {
-    display: block;
-  }
+    max-height: calc(100vh - 170px);
+    /* 画面サイズを基準として収まるように修正 */
+    overflow-y: auto;
+    /* コンテンツがはみ出た場合はスクロールバーを表示 */
+}
 
-  .search-input-mobile{
+.block .content {
+    display: none;
+}
+
+.block.expanded .content {
+    display: block;
+    width: 100%;
+    height: calc(100% - 40px);
+}
+
+.search-input-mobile {
     height: 100% !important;
     padding-left: 10px;
-  }
+}
 
-  .result-box-mobile {
+.result-box-mobile {
     width: 100% !important;
     padding: 0px;
     border: none;
-  }
+}
 
-  .item-name-mobile {
+.item-name-mobile {
     font-size: 0.5rem;
-  }
+}
 
-  .title {
+.title {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 50px;
-    padding: 2.5px;
-  }
+    padding: 5px;
+}
 
-  .title h1 {
+.title h1 {
     color: white;
     margin-bottom: 0px;
-  }
-  </style>
-  
+}
+
+.craft-box-mobile {
+    color: white;
+    font-size: 0.5rem;
+    height: calc(100% - 50px);
+    margin: 0;
+}
+
+.material-mobile {
+    color: white;
+    font-size: 0.5rem;
+}
+
+.material-row-mobile {
+    margin: 0;
+    height: 30px;
+}
+
+.material-icon-mobile {
+    width: 25px;
+    height: 25px;
+}
+
+.px-3-mobile {
+    padding-right: 0.5rem !important;
+    padding-left: 0.5rem !important;
+}
+
+.px-4-mobile {
+    padding-left: 0.5rem !important;
+}
+</style>
