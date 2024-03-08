@@ -1,6 +1,6 @@
 <template>
     <div class="title">
-        <h1></h1>
+        <img src="./assets/img/title.png">
     </div>
     <div class="container">
         <div class="block block-1">
@@ -454,6 +454,11 @@ body {
     width: 100%;
     height: 50px;
     padding: 5px;
+}
+
+.title img {
+    width: 100vw;
+    height: 50px;
 }
 
 .title h1 {
