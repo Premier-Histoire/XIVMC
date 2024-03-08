@@ -6,6 +6,13 @@
         <div class="block block-1">
             <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery"
                 @keyup.enter="ItemSearch" />
+            <select id="servers" class="select-box select-box-mobile" @focus="isSelectBoxOpen = true" @blur="isSelectBoxOpen = false"
+                ref="servers" @change="onServerSelect" v-model="selectedServer">
+                <option disabled="" value="">- Please Choose a Server -</option>
+                <optgroup v-for="(group, label) in servers" :label="label">
+                    <option v-for="server in group" :value="server">{{ server }}</option>
+                </optgroup>
+            </select>
         </div>
         <div class="block block-2" :class="{ expanded: expandedBlock === 1 }">
             <p @click="toggleBlock(1)"></p>
@@ -159,6 +166,24 @@ export default {
             searchResults: [],
             searchQuery: '',
             selectedInfo: null,
+            servers: {
+                'Chaos - Europe': ['Cerberus', 'Louisoix', 'Moogle', 'Omega', 'Phantom', 'Ragnarok', 'Sagittarius', 'Spriggan'],
+                'Light - Europe': ['Alpha', 'Lich', 'Odin', 'Phoenix', 'Raiden', 'Shiva', 'Twintania', 'Zodiark'],
+                'Elemental - Japan': ['Aegis', 'Atomos', 'Carbuncle', 'Garuda', 'Gungnir', 'Kujata', 'Tonberry', 'Typhon'],
+                'Gaia - Japan': ['Alexander', 'Bahamut', 'Durandal', 'Fenrir', 'Ifrit', 'Ridill', 'Tiamat', 'Ultima'],
+                'Mana - Japan': ['Anima', 'Asura', 'Chocobo', 'Hades', 'Ixion', 'Masamune', 'Pandaemonium', 'Titan'],
+                'Meteor - Japan': ['Belias', 'Mandragora', 'Ramuh', 'Shinryu', 'Unicorn', 'Valefor', 'Yojimbo', 'Zeromus'],
+                'Aether - America': ['Adamantoise', 'Cactuar', 'Faerie', 'Gilgamesh', 'Jenova', 'Midgardsormr', 'Sargatanas', 'Siren'],
+                'Primal - America': ['Behemoth', 'Excalibur', 'Exodus', 'Famfrit', 'Hyperion', 'Lamia', 'Leviathan', 'Ultros'],
+                'Crystal - America': ['Balmung', 'Brynhildr', 'Coeurl', 'Diabolos', 'Goblin', 'Malboro', 'Mateus', 'Zalera'],
+                'Dynamis - America': ['Halicarnassus', 'Maduin', 'Marilith', 'Seraph'],
+                'Materia - Oceania': ['Bismarck', 'Ravana', 'Sephirot', 'Sophia', 'Zurvan'],
+                '陆行鸟 - 中国': ['宇宙和音', '幻影群岛', '神意之地', '萌芽池', '沃仙曦染', '拉诺西亚', '晨曦王座', '红玉海'],
+                '莫古力 - 中国': ['神拳痕', '潮风亭', '白金幻象', '白银乡', '旅人栈桥', '梦羽宝境', '拂晓之间', '龙巢神殿'],
+                '猫小胖 - 中国': ['延夏', '海猫茶屋', '紫水栈桥', '柔风海湾', '静语庄园', '摩杜纳', '琥珀原', ''],
+                '豆豆柴 - 中国': ['伊修加德', '黄金谷', '月牙湾', '水晶塔', '雪松原', '太阳海岸', '红茶川', '银泪湖'],
+                '한국 - 한국': ['모그리', '초코보', '카벙클', '톤베리', '펜리르']
+            }
         };
     },
     created() {
@@ -199,29 +224,29 @@ export default {
             }
         },
         ItemSearch() {
-        try {
-            // 検索処理を行い、結果をsearchResultsに格納する
-            this.searchResults = this.itemsData.filter(item =>
-            item.Name.includes(this.searchQuery)
-            ).map(item => ({
-            ...item,
-            iconUrl: this.getIconUrl(item.Icon),
-            isCraftable: this.isCraftable(item.ItemId),
-            }));
+            try {
+                // 検索処理を行い、結果をsearchResultsに格納する
+                this.searchResults = this.itemsData.filter(item =>
+                    item.Name.includes(this.searchQuery)
+                ).map(item => ({
+                    ...item,
+                    iconUrl: this.getIconUrl(item.Icon),
+                    isCraftable: this.isCraftable(item.ItemId),
+                }));
 
-            // 検索結果があればブロック2を展開する
-            if (this.searchResults.length > 0) {
-            this.expandedBlock = 1;
-            } else {
-            // 検索結果がない場合はブロック2を閉じる
-            this.expandedBlock = null;
+                // 検索結果があればブロック2を展開する
+                if (this.searchResults.length > 0) {
+                    this.expandedBlock = 1;
+                } else {
+                    // 検索結果がない場合はブロック2を閉じる
+                    this.expandedBlock = null;
+                }
+
+                // キーボードを閉じる
+                document.activeElement.blur();
+            } catch (error) {
+                console.error('検索エラー:', error);
             }
-
-            // キーボードを閉じる
-            document.activeElement.blur();
-        } catch (error) {
-            console.error('検索エラー:', error);
-        }
         },
         getIconUrl(imageId) {
             const baseId = Math.floor(imageId / 1000) * 1000; // 1万の位を基にベースIDを算出
@@ -409,7 +434,7 @@ body {
 }
 
 .block-1 {
-    height: 40px;
+    height: 80px;
     /* block-1 の高さを設定 */
 }
 
@@ -433,7 +458,19 @@ body {
 }
 
 .search-input-mobile {
-    height: 100% !important;
+    height: 45% !important;
+    padding-left: 10px;
+    margin-bottom: 5px;
+}
+
+.select-box-mobile {
+    height: 45%;
+    margin-bottom: 5px;
+    width: 100%;
+    border-radius: 5px;
+    background-color: #545454;
+    border: solid 1px #454044;
+    color: #fff;
     padding-left: 10px;
 }
 
