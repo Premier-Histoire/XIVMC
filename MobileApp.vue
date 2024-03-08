@@ -178,6 +178,7 @@ export default {
             } else if (index !== 0) { // ブロック1以外のクリックのみ展開
                 this.expandedBlock = index;
             }
+            console.log(this.expandedBlock)
         },
         async loadJsonData() {
             try {
@@ -198,6 +199,7 @@ export default {
             }
         },
         ItemSearch() {
+            this.$refs.searchInput.blur();
             try {
                 // 検索処理を行い、結果をsearchResultsに格納する
                 this.searchResults = this.itemsData.filter(item =>
@@ -307,6 +309,7 @@ export default {
                     selectedItem.current = await this.currentHistory(item.ItemId);
                 }
                 this.selectedInfo = selectedItem;
+                console.log(this.selectedInfo)
             } catch (error) {
                 console.error('アイテム選択エラー:', error);
             }
