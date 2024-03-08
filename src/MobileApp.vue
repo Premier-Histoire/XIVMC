@@ -4,7 +4,7 @@
     </div>
     <div class="container">
         <div class="block block-1">
-            <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery"
+            <input class="search-input search-input-mobile" placeholder="アイテム名" inputmode=”search” type="text" v-model="searchQuery"
                 @keyup.enter="ItemSearch" />
         </div>
         <div class="block block-2" :class="{ expanded: expandedBlock === 1 }">
@@ -199,6 +199,7 @@ export default {
             }
         },
         ItemSearch() {
+            this.$refs.searchInput.blur();
             try {
                 // 検索処理を行い、結果をsearchResultsに格納する
                 this.searchResults = this.itemsData.filter(item =>
