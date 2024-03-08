@@ -472,6 +472,7 @@ body {
     border: solid 1px #454044;
     color: #fff;
     padding-left: 10px;
+    background: #545454;
 }
 
 .result-box-mobile {
