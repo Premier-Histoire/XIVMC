@@ -199,26 +199,29 @@ export default {
             }
         },
         ItemSearch() {
-            try {
-                // 検索処理を行い、結果をsearchResultsに格納する
-                this.searchResults = this.itemsData.filter(item =>
-                    item.Name.includes(this.searchQuery)
-                ).map(item => ({
-                    ...item,
-                    iconUrl: this.getIconUrl(item.Icon),
-                    isCraftable: this.isCraftable(item.ItemId),
-                }));
+        try {
+            // 検索処理を行い、結果をsearchResultsに格納する
+            this.searchResults = this.itemsData.filter(item =>
+            item.Name.includes(this.searchQuery)
+            ).map(item => ({
+            ...item,
+            iconUrl: this.getIconUrl(item.Icon),
+            isCraftable: this.isCraftable(item.ItemId),
+            }));
 
-                // 検索結果があればブロック2を展開する
-                if (this.searchResults.length > 0) {
-                    this.expandedBlock = 1;
-                } else {
-                    // 検索結果がない場合はブロック2を閉じる
-                    this.expandedBlock = null;
-                }
-            } catch (error) {
-                console.error('検索エラー:', error);
+            // 検索結果があればブロック2を展開する
+            if (this.searchResults.length > 0) {
+            this.expandedBlock = 1;
+            } else {
+            // 検索結果がない場合はブロック2を閉じる
+            this.expandedBlock = null;
             }
+
+            // キーボードを閉じる
+            document.activeElement.blur();
+        } catch (error) {
+            console.error('検索エラー:', error);
+        }
         },
         getIconUrl(imageId) {
             const baseId = Math.floor(imageId / 1000) * 1000; // 1万の位を基にベースIDを算出
