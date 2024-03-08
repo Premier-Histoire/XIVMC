@@ -4,8 +4,7 @@
     </div>
     <div class="container">
         <div class="block block-1">
-            <input class="search-input search-input-mobile" placeholder="アイテム名" inputmode=”search” type="text" v-model="searchQuery"
-            v-on:submit="ItemSearch" />
+            <input class="search-input search-input-mobile" placeholder="アイテム名" type="text" v-model="searchQuery" @keydown.enter="ItemSearch" inputmode="search">
         </div>
         <div class="block block-2" :class="{ expanded: expandedBlock === 1 }">
             <p @click="toggleBlock(1)"></p>
