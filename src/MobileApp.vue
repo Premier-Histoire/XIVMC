@@ -15,7 +15,7 @@
                 @keyup.enter="ItemSearch" />
         </div>
         <div class="block block-2" :class="{ expanded: expandedBlock === 1 }">
-            <p @click="toggleBlock(1)"></p>
+            <p class="block-nav" @click="toggleBlock(1)">リスト</p>
             <div class="content" v-if="expandedBlock === 1">
                 <div class="result-box result-box-mobile">
                     <div v-for="item in searchResults" :key="item" @click="selectItem(item)">
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="block block-3" :class="{ expanded: expandedBlock === 2 }">
-            <p></p>
+            <p class="block-nav">詳細</p>
             <div class="content" v-if="expandedBlock === 2">
                 <div class="craft-box craft-box-mobile">
                     <div v-if="isLoading || (selectedInfo === null)" class="info-loading-indicator">
@@ -88,7 +88,7 @@
                     selectedInfo.totalCost * 100).toFixed(2) }}%</span>
                         </div>
                     </div>
-                    <div class="px-4-mobile">
+                    <div class="px-4-mobile xivfont">
                         <div v-if="selectedInfo && selectedInfo.sales" class="history-section">
                             <h5>販売履歴</h5>
                             <div class="history-table">
@@ -393,8 +393,21 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+    font-family: 'XivFont';
+    src: url('fonts/xivfont.ttf') format('truetype');
+    }
+
+@font-face {
+    font-family: 'NotoSansJP';
+    src: url('fonts/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+    }
 body {
     color: white;
+}
+
+.xivfont {
+    font-family: 'Xivfont', sans-serif;
 }
 
 .container {
@@ -415,6 +428,17 @@ body {
 }
 
 .block p {
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    height: auto;
+    color: white;
+    position: sticky;
+    background-color: #2D302D;
+    box-sizing: border-box;
+}
+
+.block-nav {
     margin: 0;
     /* マージンをゼロに設定 */
     padding-top: 5px;
@@ -441,7 +465,7 @@ body {
 .block.expanded {
     border-bottom: 1px solid #ccc;
     flex-grow: 1;
-    max-height: calc(100vh - 170px);
+    max-height: calc(100vh - 220px);
     /* 画面サイズを基準として収まるように修正 */
     overflow-y: auto;
     /* コンテンツがはみ出た場合はスクロールバーを表示 */
