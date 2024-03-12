@@ -144,7 +144,7 @@ export default {
 <style>
 @font-face {
     font-family: 'NotoSansJP';
-    src: url('fonts/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap') format('truetype');
     }
 
 .searchpanel {
