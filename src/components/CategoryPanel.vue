@@ -141,9 +141,15 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
+@font-face {
+    font-family: 'NotoSansJP';
+    src: url('fonts/NotoSansJP-VariableFont_wght.ttf') format('truetype');
+    }
+
 .searchpanel {
     height: 100%;
+    font-family: 'NotoSansJP', sans-serif;
 }
 
 .category {
