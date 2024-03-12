@@ -6,7 +6,7 @@
                 <button v-for="(item, index) in items" :key="`btn-${index}`"
                     @click="filterSearch(item.pairId, level, selectedOption)">
                     <img :src="`https://xivapi.com/i/060000/${item.id}.png`" alt="Icon" class="button-icon"
-                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-offset="0, 10"
                         :title="`${item.name}`">
                 </button>
             </div>
@@ -252,10 +252,10 @@ export default {
 .dropdown-icon-bougu {
     position: absolute;
     color: #fff;
-    top: 445px;
-    left: 20px;
+    top: 446px;
+    left: 30px;
     z-index: 100;
-    font-size: 12px;
+    font-size: 10px;
     /* セレクトボックスの上に表示 */
 }
 
