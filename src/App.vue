@@ -11,7 +11,8 @@
                     <div class="select-box-container">
                         <span class="dropdown-icon">{{ isSelectBoxOpen ? '▼' : '▶' }}</span>
                         <select id="servers" class="select-box" @focus="isSelectBoxOpen = true"
-                            @blur="isSelectBoxOpen = false" ref="servers" @change="onServerSelect" v-model="selectedServer">
+                            @blur="isSelectBoxOpen = false" ref="servers" @change="onServerSelect"
+                            v-model="selectedServer">
                             <option disabled="" value="">- Please Choose a Server -</option>
                             <optgroup v-for="(group, label) in servers" :label="label">
                                 <option v-for="server in group" :value="server">{{ server }}</option>
@@ -38,13 +39,17 @@
                         MogStation
                     </a>
                     <a href="https://discord.gg/GsGdqCTJNM" class="btn btn-discord" role="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-discord" viewBox="0 0 16 16">
-                            <path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-discord" viewBox="0 0 16 16">
+                            <path
+                                d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z" />
                         </svg>
                     </a>
                     <a href="https://discord.gg/GsGdqCTJNM" class="btn btn-x" role="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
-                            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                            class="bi bi-twitter-x" viewBox="0 0 16 16">
+                            <path
+                                d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
                         </svg>
                     </a>
                 </div>
@@ -87,13 +92,14 @@
                                         aria-selected="true">素材情報</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" :class="{ active: !selectedInfo.isCraftable }" id="profile-tab"
-                                        data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab"
-                                        aria-controls="profile" aria-selected="false">相場情報</button>
+                                    <button class="nav-link" :class="{ active: !selectedInfo.isCraftable }"
+                                        id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+                                        role="tab" aria-controls="profile" aria-selected="false">相場情報</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact"
-                                        type="button" role="tab" aria-controls="contact" aria-selected="false">開発中</button>
+                                    <button class="nav-link" id="contact-tab" data-bs-toggle="tab"
+                                        data-bs-target="#contact" type="button" role="tab" aria-controls="contact"
+                                        aria-selected="false">開発中</button>
                                 </li>
                             </ul>
                             <div class="tab-content" id="myTabContent">
@@ -125,32 +131,35 @@
                                                 </span>
                                             </div>
                                             <div v-if="material.expanded" class="sub-materials">
-                                                <div v-for="subMaterial in material.subMaterials" :key="subMaterial.name"
-                                                    class="sub-material-row">
-                                                    <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl" alt="アイコン"
-                                                        class="material-icon">
+                                                <div v-for="subMaterial in material.subMaterials"
+                                                    :key="subMaterial.name" class="sub-material-row">
+                                                    <img v-if="subMaterial.iconUrl" :src="subMaterial.iconUrl"
+                                                        alt="アイコン" class="material-icon">
                                                     <span class="material-name">{{ subMaterial.name }}</span>
                                                     <span class="material-quantity">{{ subMaterial.quantity }}個</span>
-                                                    <span class="material-price">{{ subMaterial.price.toLocaleString() }} </span>
+                                                    <span class="material-price">{{ subMaterial.price.toLocaleString()
+                                                        }} </span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="material-row price-info border-top">
                                             <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
                                             <span class="material-name">総合計価格</span>
-                                            <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }} </span>
+                                            <span class="material-price">{{ selectedInfo.totalCost.toLocaleString() }}
+                                                </span>
                                         </div>
                                         <div class="material-row price-info">
                                             <div class="button-placeholder"></div> <!-- 位置合わせ用のプレースホルダー -->
                                             <span class="material-name">マーケット価格</span>
-                                            <span class="material-price">{{ selectedInfo.finalProductPrice.toLocaleString() }} </span>
+                                            <span class="material-price">{{
+            selectedInfo.finalProductPrice.toLocaleString() }} </span>
                                         </div>
                                         <div class="material-row price-info">
                                             <div class="button-placeholder"></div>
                                             <span class="material-name">利益率</span>
                                             <span class="material-price">{{ ((selectedInfo.finalProductPrice -
-                                                selectedInfo.totalCost) /
-                                                selectedInfo.totalCost * 100).toFixed(2) }}%</span>
+            selectedInfo.totalCost) /
+            selectedInfo.totalCost * 100).toFixed(2) }}%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -178,7 +187,8 @@
                                                             <td v-if="sale.hq"></td>
                                                             <td v-else></td>
                                                             <td>{{ sale.pricePerUnit.toLocaleString() }}</td>
-                                                            <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString() }}
+                                                            <td>{{ new Date(sale.timestamp * 1000).toLocaleDateString()
+                                                                }}
                                                             </td>
                                                             <td>{{ sale.buyerName }}</td>
                                                         </tr>
@@ -263,37 +273,37 @@ export default {
             },
             categories: {
                 'メインアーム/サブアーム': [
-                    { id: '060102', pairId: '10' },
-                    { id: '060103', pairId: '11' },
-                    { id: '060170', pairId: '76' },
-                    { id: '060181', pairId: '86' },
-                    { id: '060104', pairId: '13' },
-                    { id: '060183', pairId: '88' },
-                    { id: '060101', pairId: '9' },
-                    { id: '060177', pairId: '83' },
-                    { id: '060106', pairId: '73' },
-                    { id: '060105', pairId: '12' },
-                    { id: '060172', pairId: '77' },
-                    { id: '060182', pairId: '87' },
-                    { id: '060108', pairId: '14' },
-                    { id: '060109', pairId: '16' },
-                    { id: '060176', pairId: '84' },
-                    { id: '060107', pairId: '15' },
-                    { id: '060178', pairId: '85' },
-                    { id: '060171', pairId: '78' },
-                    { id: '060184', pairId: '89' },
-                    { id: '060112', pairId: '19' },
-                    { id: '060113', pairId: '20' },
-                    { id: '060114', pairId: '21' },
-                    { id: '060115', pairId: '22' },
-                    { id: '060116', pairId: '23' },
-                    { id: '060117', pairId: '24' },
-                    { id: '060118', pairId: '25' },
-                    { id: '060119', pairId: '26' },
-                    { id: '060120', pairId: '27' },
-                    { id: '060121', pairId: '28' },
-                    { id: '060122', pairId: '29' },
-                    { id: '060123', pairId: '30' }
+                    { id: '060102', pairId: '10', name: 'テスト' },
+                    { id: '060103', pairId: '11', name: 'テスト' },
+                    { id: '060170', pairId: '76', name: 'テスト' },
+                    { id: '060181', pairId: '86', name: 'テスト' },
+                    { id: '060104', pairId: '13', name: 'テスト' },
+                    { id: '060183', pairId: '88', name: 'テスト' },
+                    { id: '060101', pairId: '9', name: 'テスト' },
+                    { id: '060177', pairId: '83', name: 'テスト' },
+                    { id: '060106', pairId: '73', name: 'テスト' },
+                    { id: '060105', pairId: '12', name: 'テスト' },
+                    { id: '060172', pairId: '77', name: 'テスト' },
+                    { id: '060182', pairId: '87', name: 'テスト' },
+                    { id: '060108', pairId: '14', name: 'テスト' },
+                    { id: '060109', pairId: '16', name: 'テスト' },
+                    { id: '060176', pairId: '84', name: 'テスト' },
+                    { id: '060107', pairId: '15', name: 'テスト' },
+                    { id: '060178', pairId: '85', name: 'テスト' },
+                    { id: '060171', pairId: '78', name: 'テスト' },
+                    { id: '060184', pairId: '89', name: 'テスト' },
+                    { id: '060112', pairId: '19', name: 'テスト' },
+                    { id: '060113', pairId: '20', name: 'テスト' },
+                    { id: '060114', pairId: '21', name: 'テスト' },
+                    { id: '060115', pairId: '22', name: 'テスト' },
+                    { id: '060116', pairId: '23', name: 'テスト' },
+                    { id: '060117', pairId: '24', name: 'テスト' },
+                    { id: '060118', pairId: '25', name: 'テスト' },
+                    { id: '060119', pairId: '26', name: 'テスト' },
+                    { id: '060120', pairId: '27', name: 'テスト' },
+                    { id: '060121', pairId: '28', name: 'テスト' },
+                    { id: '060122', pairId: '29', name: 'テスト' },
+                    { id: '060123', pairId: '30', name: 'テスト' }
                 ],
                 '防具/アクセサリ': [
                     { id: '060110', pairId: '17' },
@@ -348,10 +358,10 @@ export default {
         };
     },
     computed: {
-            isScreenHeight1080() {
-                return window.innerHeight === 1080; // 画面の高さが1080ピクセルかどうかを返す
-            }
-        },
+        isScreenHeight1080() {
+            return window.innerHeight === 1080; // 画面の高さが1080ピクセルかどうかを返す
+        }
+    },
     created() {
         this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
         const savedServer = localStorage.getItem('selectedServer');
@@ -575,7 +585,7 @@ export default {
 <style>
 button {
     cursor: pointer;
-  }
+}
 
 .loading-indicator {
     position: fixed;
@@ -718,44 +728,61 @@ button {
     margin-bottom: 20px;
     display: flex;
     align-items: flex-start;
-    flex-direction: column; /* 要素を垂直方向に配置 */
+    flex-direction: column;
+    /* 要素を垂直方向に配置 */
 }
 
 .btn-discord {
     width: 100%;
     height: 50px;
-    background-color: #7289da !important; /* Discordの青色 */
-    border-color: #7289da !important; /* 枠線の色 */
-    color: white !important; /* テキストの色 */
-    border-radius: 5px !important; /* 角の丸み */
+    background-color: #7289da !important;
+    /* Discordの青色 */
+    border-color: #7289da !important;
+    /* 枠線の色 */
+    color: white !important;
+    /* テキストの色 */
+    border-radius: 5px !important;
+    /* 角の丸み */
     margin-bottom: 10px;
-    padding: 10px 20px !important; /* 内側の余白 */
-    font-size: 16px !important; /* テキストのフォントサイズ */
-  }
-  
-  .btn-discord:hover {
-    background-color: #677bc4 !important; /* マウスオーバー時の背景色 */
-    border-color: #677bc4 !important; /* マウスオーバー時の枠線の色 */
-  }
+    padding: 10px 20px !important;
+    /* 内側の余白 */
+    font-size: 16px !important;
+    /* テキストのフォントサイズ */
+}
 
-  .btn-x {
+.btn-discord:hover {
+    background-color: #677bc4 !important;
+    /* マウスオーバー時の背景色 */
+    border-color: #677bc4 !important;
+    /* マウスオーバー時の枠線の色 */
+}
+
+.btn-x {
     width: 100%;
     height: 50px;
-    background-color: #1DA1F2 !important; /* Twitter Xの青色 */
-    border-color: #1DA1F2 !important; /* 枠線の色 */
-    color: white !important; /* テキストの色 */
-    border-radius: 5px !important; /* 角の丸み */
+    background-color: #1DA1F2 !important;
+    /* Twitter Xの青色 */
+    border-color: #1DA1F2 !important;
+    /* 枠線の色 */
+    color: white !important;
+    /* テキストの色 */
+    border-radius: 5px !important;
+    /* 角の丸み */
     margin-bottom: 10px;
-    padding: 10px 20px !important; /* 内側の余白 */
-    font-size: 16px !important; /* テキストのフォントサイズ */
-}
-  
-.btn-x:hover {
-    background-color: #0F7AE5 !important; /* マウスオーバー時の背景色 */
-    border-color: #0F7AE5 !important; /* マウスオーバー時の枠線の色 */
+    padding: 10px 20px !important;
+    /* 内側の余白 */
+    font-size: 16px !important;
+    /* テキストのフォントサイズ */
 }
 
-  
+.btn-x:hover {
+    background-color: #0F7AE5 !important;
+    /* マウスオーバー時の背景色 */
+    border-color: #0F7AE5 !important;
+    /* マウスオーバー時の枠線の色 */
+}
+
+
 
 .copyright {
     position: absolute;
@@ -1118,5 +1145,24 @@ scrollbar
 
 .container-fluid {
     --bs-gutter-x: 0 !important;
+}
+
+.tooltip.show {
+    opacity: 1 !important;
+}
+
+.custom-tooltip {
+    padding: 0 !important;
+}
+
+.custom-tooltip .tooltip-inner {
+    background-color: white;
+    color: black;
+}
+
+.tooltip-arrow,
+.tooltip-arrow::before {
+    border-top-color: white !important;
+    border-bottom-color: white !important;
 }
 </style>
