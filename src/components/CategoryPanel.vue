@@ -5,7 +5,9 @@
             <div class="button-grid full">
                 <button v-for="(item, index) in items" :key="`btn-${index}`"
                     @click="filterSearch(item.pairId, level, selectedOption)">
-                    <img :src="`https://xivapi.com/i/060000/${item.id}.png`" alt="Icon" class="button-icon">
+                    <img :src="`https://xivapi.com/i/060000/${item.id}.png`" alt="Icon" class="button-icon"
+                        data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip"
+                        :title="`${item.name}`">
                 </button>
             </div>
             <!-- レベル選択UIの追加 -->
@@ -68,8 +70,10 @@
         </div>
     </div>
 </template>
-  
+
 <script>
+import { Tooltip } from 'bootstrap'
+
 export default {
     props: {
         category: String,
@@ -82,6 +86,11 @@ export default {
             selectedJob: 'ADV',
             isSelectBoxOpen: false,
         };
+    },
+    mounted() {
+        new Tooltip(document.body, {
+            selector: "[data-bs-toggle='tooltip']",
+        })
     },
     computed: {
         currentLevel: {
@@ -130,8 +139,8 @@ export default {
     },
 };
 </script>
-  
-  
+
+
 <style scoped>
 .searchpanel {
     height: 100%;
@@ -141,7 +150,7 @@ export default {
     border: 2px solid #515151;
     border-radius: 10px;
     padding: 3px 10px 10px 10px;
-    margin:0 auto 5px auto;
+    margin: 0 auto 5px auto;
 }
 
 .category p {
@@ -264,7 +273,7 @@ export default {
 }
 
 .select-box:focus {
-  outline: none;
+    outline: none;
 }
 
 ::-webkit-scrollbar {
@@ -276,4 +285,3 @@ export default {
     border-radius: 3px;
 }
 </style>
-  
