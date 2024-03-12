@@ -21,7 +21,7 @@
             </div>
             <div v-if="category === '防具/アクセサリ'" class="select-box-container">
                 <div class="select-box-header">
-                    <span class="dropdown-icon">{{ isSelectBoxOpen ? '▼' : '▶' }}</span>
+                    <span class="dropdown-icon-bougu">{{ isSelectBoxOpen ? '▼' : '▶' }}</span>
                     <select class="select-box" v-model="selectedJob" @focus="isSelectBoxOpen = true"
                         @blur="isSelectBoxOpen = false">
                         <option value="ADV">すべて表示</option>
@@ -142,6 +142,11 @@ export default {
 
 
 <style>
+@font-face {
+    font-family: 'NotoSansJP';
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap') format('truetype');
+}
+
 .searchpanel {
     height: 100%;
 }
@@ -244,10 +249,10 @@ export default {
     /* アイコンとセレクトボックスの間隔 */
 }
 
-.dropdown-icon {
+.dropdown-icon-bougu {
     position: absolute;
     color: #fff;
-    top: 438px;
+    top: 445px;
     left: 20px;
     z-index: 100;
     font-size: 12px;
