@@ -583,6 +583,15 @@ export default {
 };
 </script>
 <style>
+@font-face {
+    font-family: 'XivFont';
+    src: url('fonts/xivfont.ttf') format('truetype');
+    }
+    
+.xivfont {
+    font-family: 'Xivfont', sans-serif;
+}
+
 button {
     cursor: pointer;
 }
