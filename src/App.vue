@@ -316,8 +316,8 @@ export default {
                     { id: '060154', pairId: '74', name: '雑貨(シーズナル)'   },
                     { id: '060185', pairId: '90', name: '雑貨(習得/登録系)'   },
                     { id: '060155', pairId: '75', name: 'ミニオン'   },
-                    { id: '060169', pairId: '79', name: '飛空艇・潜水艦部品'   },
-                    { id: '060173', pairId: '80', name: 'オーケストリオン関連品'   },
+                    { id: '060169', pairId: '79', name: '飛空艇/潜水艦'   },
+                    { id: '060173', pairId: '80', name: 'オーケストリオン'   },
                 ],
                 'ハウジング': [
                     { id: '060160', pairId: '65', name: '外装建材'   },
@@ -619,7 +619,9 @@ button {
     margin-left: 0.5rem;
     flex: 0 0 auto;
     position: relative;
-    width: 260px;
+    width: 280px;
+    padding-left: 10px;
+    padding-right: 10px;
     height: 100%;
     padding-top: 10px;
 }
@@ -648,10 +650,10 @@ button {
 .dropdown-icon {
     position: absolute;
     color: #fff;
-    top: 46px;
-    left: 20px;
+    top: 48px;
+    left: 30px;
     z-index: 100;
-    font-size: 12px;
+    font-size: 10px;
     /* セレクトボックスの上に表示 */
 }
 
@@ -784,7 +786,7 @@ button {
 .result-box {
     flex: 0 0 auto;
     height: 100%;
-    width: calc(calc(100vw - 285px)* 0.35);
+    width: calc(calc(100vw - 300px)* 0.35);
     font-size: 14px;
     overflow-y: auto;
     padding: 10px;
@@ -839,12 +841,10 @@ button {
 .info-box {
     flex: 0 0 auto;
     height: 100%;
-    width: calc(calc(100vw - 285px)* 0.65);
+    width: calc(calc(100vw - 300px)* 0.65);
     font-size: 14px;
     overflow-y: auto;
     padding: 10px;
-    border-left: solid #575757 2px;
-    border-right: solid #575757 2px;
 }
 
 .info-text {
@@ -1140,6 +1140,10 @@ scrollbar
 .custom-tooltip .tooltip-inner {
     background-color: white;
     font-family: 'NotoSansJP';
+    margin: 0;
+    padding: 2px;
+    font-size: 11.5px;
+    min-width: 30px;
     color: black;
 }
 
