@@ -26,32 +26,10 @@
                     <input class="search-input" type="text" v-model="searchQuery" @keyup.enter="ItemSearch" />
                 </div>
                 <div class="category-box">
-                    <p class="category">CATEGORY SEARCH</p>
+                    <p class="category-text">CATEGORY SEARCH</p>
                     <div v-for="(items, category) in categories" :key="category">
                         <CategoryPanel :category="category" :items="items" @filter-search="FilterSearch" />
                     </div>
-                </div>
-                <div class="AD" v-if="isScreenHeight1080">
-                    <a href="https://discord.gg/GsGdqCTJNM" class="btn btn-discord" role="button">
-                        Lodestone
-                    </a>
-                    <a href="https://discord.gg/GsGdqCTJNM" class="btn btn-discord" role="button">
-                        MogStation
-                    </a>
-                    <a href="https://discord.gg/GsGdqCTJNM" class="btn btn-discord" role="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                            class="bi bi-discord" viewBox="0 0 16 16">
-                            <path
-                                d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.577-.406.833a12.19 12.19 0 0 0-3.658 0 8.258 8.258 0 0 0-.412-.833.051.051 0 0 0-.052-.025c-1.125.194-2.22.534-3.257 1.011a.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032c.001.014.01.028.021.037a13.276 13.276 0 0 0 3.995 2.02.05.05 0 0 0 .056-.019c.308-.42.582-.863.818-1.329a.05.05 0 0 0-.01-.059.051.051 0 0 0-.018-.011 8.875 8.875 0 0 1-1.248-.595.05.05 0 0 1-.02-.066.051.051 0 0 1 .015-.019c.084-.063.168-.129.248-.195a.05.05 0 0 1 .051-.007c2.619 1.196 5.454 1.196 8.041 0a.052.052 0 0 1 .053.007c.08.066.164.132.248.195a.051.051 0 0 1-.004.085 8.254 8.254 0 0 1-1.249.594.05.05 0 0 0-.03.03.052.052 0 0 0 .003.041c.24.465.515.909.817 1.329a.05.05 0 0 0 .056.019 13.235 13.235 0 0 0 4.001-2.02.049.049 0 0 0 .021-.037c.334-3.451-.559-6.449-2.366-9.106a.034.034 0 0 0-.02-.019Zm-8.198 7.307c-.789 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.45.73 1.438 1.613 0 .888-.637 1.612-1.438 1.612Zm5.316 0c-.788 0-1.438-.724-1.438-1.612 0-.889.637-1.613 1.438-1.613.807 0 1.451.73 1.438 1.613 0 .888-.631 1.612-1.438 1.612Z" />
-                        </svg>
-                    </a>
-                    <a href="https://discord.gg/GsGdqCTJNM" class="btn btn-x" role="button">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
-                            class="bi bi-twitter-x" viewBox="0 0 16 16">
-                            <path
-                                d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
-                        </svg>
-                    </a>
                 </div>
                 <div class="copyright">
                     <p>FINAL FANTASY XIV</p>
@@ -356,11 +334,6 @@ export default {
                 ],
             },
         };
-    },
-    computed: {
-        isScreenHeight1080() {
-            return window.innerHeight === 1080; // 画面の高さが1080ピクセルかどうかを返す
-        }
     },
     created() {
         this.loadJsonData(); // コンポーネント作成時にJSONデータを読み込む
@@ -675,7 +648,7 @@ button {
 .dropdown-icon {
     position: absolute;
     color: #fff;
-    top: 40px;
+    top: 46px;
     left: 20px;
     z-index: 100;
     font-size: 12px;
@@ -724,11 +697,11 @@ button {
     color: #fff;
 }
 
-.category-box p {
+.category-text {
     color: #7D7463;
     font-size: 15px;
     margin-bottom: 0;
-    margin-left: 5px;
+    margin-left: 10px;
 }
 
 .AD {
@@ -1166,6 +1139,7 @@ scrollbar
 
 .custom-tooltip .tooltip-inner {
     background-color: white;
+    font-family: 'NotoSansJP';
     color: black;
 }
 
