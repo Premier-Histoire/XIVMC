@@ -578,7 +578,7 @@ button {
     /* ビューポートの全幅 */
     height: 100vh;
     /* ビューポートの全高 */
-    background-color: #2D302D;
+    background-color: #313031;
     /* 半透明の背景 */
     display: flex;
     justify-content: center;
@@ -985,7 +985,7 @@ ul {
     /* 各セクションを横幅の50%に設定 */
     color: #fff;
     margin-bottom: 10px;
-    background-color: #2D302D;
+    background-color: #313031;
 }
 
 .history-table {
