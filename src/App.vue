@@ -584,10 +584,10 @@ export default {
 </script>
 <style>
 @font-face {
-    font-family: 'XivFont';
-    src: url('fonts/xivfont.ttf') format('truetype');
+    font-family: 'NotoSansJP';
+    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap') format('truetype');
     }
-    
+
 .xivfont {
     font-family: 'Xivfont', sans-serif;
 }
