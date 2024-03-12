@@ -142,14 +142,8 @@ export default {
 
 
 <style>
-@font-face {
-    font-family: 'NotoSansJP';
-    src: url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap') format('truetype');
-    }
-
 .searchpanel {
     height: 100%;
-    font-family: 'NotoSansJP', sans-serif;
 }
 
 .category {
