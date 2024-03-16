@@ -101,7 +101,7 @@
                                                 <span class="material-quantity">{{ material.quantity }}個</span>
                                                 <span
                                                     v-if="material.subMaterials && material.subMaterials.length > 0 && material.isCheaper"
-                                                    class="material-price cheaper-price">
+                                                    class="material-price cheaper-price xivfont">
                                                     {{ material.subMaterialsTotalCost.toLocaleString() }} 
                                                 </span>
                                                 <span v-else class="material-price xivfont">
